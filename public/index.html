@@ -301,7 +301,9 @@
               <div class="prod-card__img-wrap">
                 <img src="${imgSrc}" alt="${p.name}" class="prod-card__img" loading="lazy"
                      onerror="this.src='${p.fallbackImage || 'images/prod_coffee_table.png'}';this.onerror=null;">
-                <span class="prod-card__badge">Featured</span>
+                <span class="prod-card__badge" style="${p.stock === '0' ? 'background:var(--espresso);color:white;' : ''}">
+                  ${p.stock === '0' ? 'Sold Out' : 'Featured'}
+                </span>
               </div>
               <div class="prod-card__info">
                 <p class="prod-card__cat">${catLabel}</p>

@@ -108,6 +108,7 @@
         <div class="product-gallery__main">
           <img src="${window.PJA.resolveImage(product)}" alt="Petrified Wood ${product.name} — ${catLabel} Collection" loading="eager"
                onerror="this.src='${product.fallbackImage || '/images/prod_coffee_table.png'}';this.onerror=null;">
+          ${product.stock === '0' ? `<span class="prod-card__badge" style="background:var(--espresso);color:white;top:1rem;left:1rem;">Sold Out</span>` : ''}
         </div>
         ${product.images.length > 1 ? `<div class="product-gallery__thumbs">${thumbsHTML}</div>` : ''}
       </div>
@@ -122,11 +123,14 @@
         </div>
 
         <div class="product-info__cta">
-          <a href="/contact#contact-form?interest=${product.category}&product=${encodeURIComponent(product.name)}"
-             class="btn btn--dark"
-             id="product-enquire-btn">
-            Enquire About This Piece
-          </a>
+          ${product.stock === '0' 
+            ? `<button class="btn btn--dark" disabled style="opacity: 0.5; cursor: not-allowed; width: 100%;">Sold Out</button>`
+            : `<a href="/contact#contact-form?interest=${product.category}&product=${encodeURIComponent(product.name)}"
+                 class="btn btn--dark"
+                 id="product-enquire-btn">
+                Enquire About This Piece
+              </a>`
+          }
           <a href="tel:+6285695564699" class="btn btn--ghost" id="product-call-btn">
             Call Us — +62 856-9556-4699
           </a>
@@ -216,7 +220,25 @@
   window.PJA.loadProducts()
     .then(products => {
       const product = products.find(p => p.id === productId);
-      if (!product) { window.location.href = '/collections'; return; }
+      if (!product) {
+        document.title = "Piece Found a Home — PJ Antique";
+        const container = document.getElementById('productDetailInner');
+        if (container) {
+          container.innerHTML = `
+            <div style="text-align:center; padding: 10vh 5%; animation: fadeUp 0.6s ease-out forwards;">
+              <p class="label" style="margin-bottom:1rem;">Out of Stock</p>
+              <h1 style="font-family: var(--font-display); font-size: clamp(2rem, 5vw, 3.5rem); margin-bottom: 1.5rem; line-height: 1.1;">This Piece Has<br>Found a Home</h1>
+              <p style="color: var(--warm-gray); max-width: 600px; margin: 0 auto 2.5rem; line-height: 1.6; font-size: 1.05rem;">
+                The piece you are looking for <strong>(Ref: ${productId})</strong> has been sold and removed from our active catalog. Because every petrified wood piece is a unique geological artifact, it cannot be exactly replicated.
+              </p>
+              <a href="/collections" class="btn btn--primary">Browse Available Collections</a>
+            </div>
+          `;
+        }
+        const relSection = document.querySelector('.related-section');
+        if (relSection) relSection.style.display = 'none';
+        return; 
+      }
       const categories = window.PJA.loadCategories(products);
       renderProduct(product, categories);
       renderRelated(product, products, categories);

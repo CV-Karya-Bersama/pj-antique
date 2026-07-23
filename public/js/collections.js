@@ -50,7 +50,10 @@
         <div class="prod-card__img-wrap">
           <img src="${imgSrc}" alt="Petrified Wood ${p.name} — ${catLabel} Collection" class="prod-card__img" loading="lazy"
                onerror="this.src='${fbSrc}';this.onerror=null;">
-          ${p.featured ? '<span class="prod-card__badge">Featured</span>' : ''}
+          ${p.stock === '0' 
+            ? `<span class="prod-card__badge" style="background:var(--espresso);color:white;">Sold Out</span>` 
+            : (p.featured ? `<span class="prod-card__badge">Featured</span>` : '')
+          }
           ${p.stock && p.stock.toLowerCase().includes('sold') ? '<span class="prod-card__badge prod-card__badge--sold">Sold</span>' : ''}
         </div>
         <div class="prod-card__info">
