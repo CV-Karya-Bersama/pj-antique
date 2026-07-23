@@ -121,7 +121,7 @@
   /* ──────────────────────────────────────────────────────────
      FILTER LOGIC
   ────────────────────────────────────────────────────────── */
-  function applyFilter(cat, query = '', sort = 'default') {
+  function applyFilter(cat, query = '', sort = 'default', avail = 'all') {
     activeFilter = cat;
     currentPage = 1;
     
@@ -130,7 +130,13 @@
     currentFiltered = allProducts.filter(p => {
       const matchCat = cat === 'all' || p.category === cat;
       const matchQuery = !q || p.name.toLowerCase().includes(q) || (p.id && p.id.toLowerCase().includes(q));
-      return matchCat && matchQuery;
+      
+      const isSold = p.stock === '0' || (p.stock && p.stock.toLowerCase().includes('sold'));
+      let matchAvail = true;
+      if (avail === 'active') matchAvail = !isSold;
+      if (avail === 'sold') matchAvail = isSold;
+
+      return matchCat && matchQuery && matchAvail;
     });
 
     // Apply sorting
@@ -184,9 +190,11 @@
         
         const searchInput = document.getElementById('searchInput');
         const sortSelect = document.getElementById('sortSelect');
+        const availSelect = document.getElementById('availabilitySelect');
         const query = searchInput ? searchInput.value : '';
         const sort = sortSelect ? sortSelect.value : 'default';
-        applyFilter(cat, query, sort);
+        const avail = availSelect ? availSelect.value : 'all';
+        applyFilter(cat, query, sort, avail);
       });
       return btn;
     };
@@ -223,19 +231,20 @@
       // Search Event Listener
       const searchInput = document.getElementById('searchInput');
       const sortSelect = document.getElementById('sortSelect');
+      const availSelect = document.getElementById('availabilitySelect');
       
-      if (searchInput) {
-        searchInput.addEventListener('input', (e) => {
-          applyFilter(activeFilter, e.target.value, sortSelect ? sortSelect.value : 'default');
-        });
-      }
-      
-      // Sort Event Listener
-      if (sortSelect) {
-        sortSelect.addEventListener('change', (e) => {
-          applyFilter(activeFilter, searchInput ? searchInput.value : '', e.target.value);
-        });
-      }
+      const triggerFilter = () => {
+        applyFilter(
+          activeFilter, 
+          searchInput ? searchInput.value : '', 
+          sortSelect ? sortSelect.value : 'default',
+          availSelect ? availSelect.value : 'all'
+        );
+      };
+
+      if (searchInput) searchInput.addEventListener('input', triggerFilter);
+      if (sortSelect) sortSelect.addEventListener('change', triggerFilter);
+      if (availSelect) availSelect.addEventListener('change', triggerFilter);
     })
     .catch(err => {
       console.error('[PJA] Failed to load products:', err);
