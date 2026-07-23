@@ -174,14 +174,15 @@
     related.forEach(p => {
       const cat = categories.find(c => c.id === p.category);
       track.innerHTML += `
-        <a href="/product?id=${encodeURIComponent(p.id)}" class="prod-card" data-animate="up">
+        <a href="/product?id=${encodeURIComponent(p.id)}" class="prod-card">
           <div class="prod-card__img-wrap">
             <img src="${window.PJA.resolveImage(p)}" alt="${p.name}" class="prod-card__img" loading="lazy" onerror="this.src='${p.fallbackImage || '/images/prod_coffee_table.png'}';this.onerror=null;">
           </div>
           <div class="prod-card__info">
-            <p class="prod-card__cat">${cat ? cat.label : p.category}</p>
             <h3 class="prod-card__name">${p.name}</h3>
-            <p class="prod-card__short">${p.shortDesc}</p>
+            <p class="prod-card__short" style="font-size: 0.85rem; color: var(--warm-gray); margin-top: 0.25rem;">SKU: ${p.id}</p>
+            ${p.dimensions ? `<p class="prod-card__dim">${p.dimensions}</p>` : ''}
+            ${p.weight ? `<p class="prod-card__dim">${p.weight} kg</p>` : ''}
             <span class="prod-card__action">View Details</span>
           </div>
         </a>`;
