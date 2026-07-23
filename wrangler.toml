@@ -1,0 +1,10 @@
+# Cloudflare Pages — wrangler.toml
+# This config is used when deploying via Wrangler CLI.
+# For dashboard deployment (drag & drop), this file is optional.
+
+name = "pj-antique"
+compatibility_date = "2024-01-01"
+pages_build_output_dir = "."
+
+[vars]
+# No environment variables needed for current setup
