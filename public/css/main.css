@@ -1606,3 +1606,32 @@ section { overflow: hidden; }
   .sitemap-grid { grid-template-columns: 1fr; }
 }
 
+/* ============================================================
+   LIGHTBOX
+   ============================================================ */
+.lightbox {
+  position: fixed;
+  top: 0; left: 0; width: 100vw; height: 100vh;
+  background: rgba(26,24,20,0.95);
+  z-index: 9999;
+  display: flex;
+  align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.3s ease-out;
+  cursor: zoom-out;
+}
+.lightbox.active {
+  opacity: 1; pointer-events: auto;
+}
+.lightbox-img {
+  max-width: 90vw;
+  max-height: 90vh;
+  object-fit: contain;
+}
+.lightbox-close {
+  position: absolute;
+  top: 20px; right: 30px;
+  color: #fff;
+  font-size: 40px;
+  cursor: pointer;
+}

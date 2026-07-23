@@ -31,6 +31,33 @@
     });
   }
 
+  /* ---- Lightbox Logic ---- */
+  function initLightbox() {
+    const mainImg = document.querySelector('.product-gallery__main img');
+    if (!mainImg) return;
+    
+    let lb = document.querySelector('.lightbox');
+    if (!lb) {
+      lb = document.createElement('div');
+      lb.className = 'lightbox';
+      lb.innerHTML = `<div class="lightbox-close">&times;</div><img class="lightbox-img" src="" alt="">`;
+      document.body.appendChild(lb);
+    }
+    
+    const lbImg = lb.querySelector('.lightbox-img');
+    
+    mainImg.style.cursor = 'zoom-in';
+    mainImg.addEventListener('click', () => {
+      lbImg.src = mainImg.src;
+      lbImg.alt = mainImg.alt;
+      lb.classList.add('active');
+    });
+    
+    lb.addEventListener('click', () => {
+      lb.classList.remove('active');
+    });
+  }
+
   /* ---- Build product detail HTML ---- */
   function renderProduct(product, categories) {
     const container = document.getElementById('productDetailInner');
@@ -123,6 +150,7 @@
 
     // Init gallery interactivity
     if (product.images.length > 1) initGallery(product.images);
+    initLightbox();
 
     // Update page title
     document.title = `${product.name} — PJ Antique`;
@@ -158,6 +186,18 @@
           </div>
         </a>`;
     });
+
+    // Init related products navigation
+    const btnPrev = document.getElementById('related-prev');
+    const btnNext = document.getElementById('related-next');
+    if (btnPrev && btnNext) {
+      btnPrev.addEventListener('click', () => {
+        track.scrollBy({ left: -340, behavior: 'smooth' });
+      });
+      btnNext.addEventListener('click', () => {
+        track.scrollBy({ left: 340, behavior: 'smooth' });
+      });
+    }
   }
 
   /* ---- Init ---- */
