@@ -30,7 +30,7 @@
 <div class="page-transition" id="pageTransition"></div>
 
 <!-- NAVIGATION -->
-<nav class="nav dark-mode scrolled" id="mainNav" role="navigation" aria-label="Main navigation">
+<nav class="nav scrolled" id="mainNav" role="navigation" aria-label="Main navigation">
   <div class="nav__inner">
     <ul class="nav__links" role="list">
       <li><a href="/" class="nav__link" id="nav-home">Home</a></li>
@@ -38,7 +38,7 @@
       <li><a href="/about" class="nav__link" id="nav-about">Our Story</a></li>
     </ul>
     <a href="/" class="nav__logo" aria-label="Putra Jambu Antique — Home">
-      <img src="images/PJA Header Logo_No_White_Background_1.png" alt="Putra Jambu Antique" class="nav__logo-img" height="42" style="height:42px;width:auto;display:block;filter:invert(1) brightness(10) saturate(0);">
+      <img src="images/PJA Header Logo_No_White_Background_1.png" alt="Putra Jambu Antique" class="nav__logo-img" height="42" style="height:42px;width:auto;display:block;">
     </a>
     <ul class="nav__links nav__links--right" role="list">
       <li><a href="/contact" class="nav__link active" id="nav-contact">Visit Us</a></li>
@@ -56,6 +56,7 @@
   <a href="/collections">Collections</a>
   <a href="/about">Our Story</a>
   <a href="/contact">Visit Us</a>
+  <a href="tel:+6285718233007">+62 857-1823-3007</a>
 </div>
 
 <!-- CONTACT LAYOUT -->
@@ -181,7 +182,7 @@
           <select id="contact-interest" name="interest" data-fs-field>
             <option value="">Select a category…</option>
             <option value="Living Room">Living Room</option>
-            <option value="Bedroom">Bedroom</option>
+            <option value="seater">Seater</option>
             <option value="Dining Room">Dining Room</option>
             <option value="Outdoor">Outdoor</option>
             <option value="Decoration">Decoration</option>
@@ -255,7 +256,7 @@
         <p class="footer__col-title">Collections</p>
         <ul class="footer__links">
           <li><a href="/collections?cat=living-room">Living Room</a></li>
-          <li><a href="/collections?cat=bedroom">Bedroom</a></li>
+          <li><a href="/collections?cat=seater">Seater</a></li>
           <li><a href="/collections?cat=dining-room">Dining Room</a></li>
           <li><a href="/collections?cat=outdoor">Outdoor</a></li>
           <li><a href="/collections?cat=decoration">Decoration</a></li>
@@ -326,19 +327,40 @@
       msgError.style.display = 'none';
 
       try {
+        // Attempt 1: Formspree
         const res = await fetch('https://formspree.io/f/xeeygylw', {
           method: 'POST',
           body: new FormData(form),
           headers: { 'Accept': 'application/json' }
         });
+        
         if (res.ok) {
           msgSuccess.style.display = 'block';
           form.reset();
         } else {
-          throw new Error('Not ok');
+          // If Formspree fails (e.g. reCAPTCHA issue), trigger fallback
+          throw new Error('Formspree Not OK');
         }
       } catch (err) {
-        msgError.style.display = 'block';
+        console.warn('Formspree failed, attempting Cloudflare Email Routing fallback...', err);
+        
+        try {
+          // Attempt 2: Cloudflare API Fallback
+          const cfRes = await fetch('/api/contact', {
+            method: 'POST',
+            body: new FormData(form)
+          });
+          
+          if (cfRes.ok) {
+            msgSuccess.style.display = 'block';
+            form.reset();
+          } else {
+            throw new Error('Cloudflare API Fallback failed');
+          }
+        } catch (cfErr) {
+          console.error('Both Formspree and Cloudflare Fallback failed', cfErr);
+          msgError.style.display = 'block';
+        }
       } finally {
         btn.textContent = 'Send Message →';
         btn.disabled = false;

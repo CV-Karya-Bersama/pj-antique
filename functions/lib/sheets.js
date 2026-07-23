@@ -147,7 +147,7 @@ export function normaliseCategory(raw) {
 
   // ── Known categories ──────────────────────────────────────────────────────
   if (s.includes('living') || s.includes('ruang tamu'))                      return 'living-room';
-  if (s.includes('bed') || s.includes('kamar tidur'))                        return 'bedroom';
+  if (s.includes('seat') || s.includes('kursi') || s.includes('chair') || s.includes('stool') || s.includes('bangku') || s.includes('bench')) return 'seater';
   if (s.includes('dining') || s.includes('makan'))                           return 'dining-room';
   if (s.includes('outdoor') || s.includes('garden') || s.includes('taman')) return 'outdoor';
   if (s.includes('decor') || s.includes('accent') || s.includes('aksesoris') || s.includes('ornamen')) return 'decoration';
@@ -164,7 +164,7 @@ export function normaliseCategory(raw) {
 export function normalisedLabel(raw) {
   const s = (raw || '').toLowerCase().trim();
   if (s.includes('living') || s.includes('ruang tamu'))  return 'Living Room';
-  if (s.includes('bed') || s.includes('kamar tidur'))    return 'Bedroom';
+  if (s.includes('seat') || s.includes('kursi') || s.includes('chair') || s.includes('stool') || s.includes('bangku') || s.includes('bench')) return 'seater';
   if (s.includes('dining') || s.includes('makan'))       return 'Dining Room';
   if (s.includes('outdoor') || s.includes('garden'))     return 'Outdoor';
   if (s.includes('decor') || s.includes('accent') || s.includes('aksesoris')) return 'Decoration';

@@ -58,10 +58,10 @@ window.PJA.loadProducts = async function () {
 
 /**
  * Derive the unique category list from loaded products.
- * Preferred order: Living Room, Bedroom, Dining Room, Outdoor, Decoration.
+ * Preferred order: Living Room, Seater, Dining Room, Outdoor, Decoration.
  * Any additional categories from the sheet are appended alphabetically.
  */
-const PREFERRED_ORDER = ['living-room', 'bedroom', 'dining-room', 'outdoor', 'decoration'];
+const PREFERRED_ORDER = ['living-room', 'seater', 'dining-room', 'outdoor', 'decoration'];
 
 window.PJA.loadCategories = function (products) {
   const catMap = new Map();

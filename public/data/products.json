@@ -1,7 +1,7 @@
 {
   "categories": [
     { "id": "living-room",  "label": "Living Room",  "icon": "sofa" },
-    { "id": "bedroom",      "label": "Bedroom",       "icon": "bed" },
+    { "id": "seater",      "label": "Seater",       "icon": "bed" },
     { "id": "dining-room",  "label": "Dining Room",   "icon": "utensils" },
     { "id": "outdoor",      "label": "Outdoor",       "icon": "leaf" },
     { "id": "decoration",   "label": "Decoration",    "icon": "sparkles" }
@@ -102,9 +102,9 @@
     {
       "id": "BD-001",
       "name": "Petrified Wood Nightstand",
-      "category": "bedroom",
+      "category": "seater",
       "shortDesc": "A sculptural bedside companion with organic presence.",
-      "description": "Bring the beauty of ancient earth into your bedroom sanctuary. This nightstand features a petrified wood slab top with a hand-crafted storage drawer below. The warm amber and espresso tones of the ancient wood create a calming, grounding bedside presence.",
+      "description": "Bring the beauty of ancient earth into your Seater sanctuary. This nightstand features a petrified wood slab top with a hand-crafted storage drawer below. The warm amber and espresso tones of the ancient wood create a calming, grounding bedside presence.",
       "material": "Petrified Wood, Teak Wood",
       "dimensions": "W 50 cm × D 40 cm × H 55 cm",
       "weight": "Approx. 30–50 kg",
@@ -114,10 +114,10 @@
     },
     {
       "id": "BD-002",
-      "name": "Bedroom Accent Table",
-      "category": "bedroom",
+      "name": "Seater Accent Table",
+      "category": "seater",
       "shortDesc": "Round petrified wood slab on a minimal tripod base.",
-      "description": "A versatile accent table suited for bedroom corners, vanity areas, or as a plant stand. The circular cross-section reveals beautiful growth-ring mineral patterns reminiscent of ancient agate. Mounted on a slim brass or iron tripod base.",
+      "description": "A versatile accent table suited for Seater corners, vanity areas, or as a plant stand. The circular cross-section reveals beautiful growth-ring mineral patterns reminiscent of ancient agate. Mounted on a slim brass or iron tripod base.",
       "material": "Petrified Wood, Brass Tripod",
       "dimensions": "Dia. 45 cm × H 60 cm",
       "weight": "Approx. 25–40 kg",
