@@ -119,7 +119,7 @@
   /* ──────────────────────────────────────────────────────────
      FILTER LOGIC
   ────────────────────────────────────────────────────────── */
-  function applyFilter(cat, query = '') {
+  function applyFilter(cat, query = '', sort = 'default') {
     activeFilter = cat;
     currentPage = 1;
     
@@ -130,6 +130,25 @@
       const matchQuery = !q || p.name.toLowerCase().includes(q) || (p.id && p.id.toLowerCase().includes(q));
       return matchCat && matchQuery;
     });
+
+    // Apply sorting
+    if (sort !== 'default') {
+      currentFiltered.sort((a, b) => {
+        if (sort === 'weight-desc' || sort === 'weight-asc') {
+          const wA = parseFloat(a.weight) || 0;
+          const wB = parseFloat(b.weight) || 0;
+          return sort === 'weight-desc' ? wB - wA : wA - wB;
+        }
+        if (sort === 'name-asc' || sort === 'name-desc') {
+          const nA = a.name.toLowerCase();
+          const nB = b.name.toLowerCase();
+          if (nA < nB) return sort === 'name-asc' ? -1 : 1;
+          if (nA > nB) return sort === 'name-asc' ? 1 : -1;
+          return 0;
+        }
+        return 0;
+      });
+    }
       
     renderGrid(currentFiltered.slice(0, PAGE_SIZE));
 
@@ -162,8 +181,10 @@
         window.history.replaceState({}, '', url);
         
         const searchInput = document.getElementById('searchInput');
+        const sortSelect = document.getElementById('sortSelect');
         const query = searchInput ? searchInput.value : '';
-        applyFilter(cat, query);
+        const sort = sortSelect ? sortSelect.value : 'default';
+        applyFilter(cat, query, sort);
       });
       return btn;
     };
@@ -199,9 +220,18 @@
 
       // Search Event Listener
       const searchInput = document.getElementById('searchInput');
+      const sortSelect = document.getElementById('sortSelect');
+      
       if (searchInput) {
         searchInput.addEventListener('input', (e) => {
-          applyFilter(activeFilter, e.target.value);
+          applyFilter(activeFilter, e.target.value, sortSelect ? sortSelect.value : 'default');
+        });
+      }
+      
+      // Sort Event Listener
+      if (sortSelect) {
+        sortSelect.addEventListener('change', (e) => {
+          applyFilter(activeFilter, searchInput ? searchInput.value : '', e.target.value);
         });
       }
     })
