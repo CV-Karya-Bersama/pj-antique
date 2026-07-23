@@ -152,8 +152,18 @@
     if (product.images.length > 1) initGallery(product.images);
     initLightbox();
 
-    // Update page title
-    document.title = `${product.name} — PJ Antique`;
+    // Update SEO Meta Tags
+    document.title = `Petrified Wood ${product.name} - ${product.id} — PJ Antique`;
+    
+    let metaDesc = document.querySelector('meta[name="description"]');
+    if (!metaDesc) {
+      metaDesc = document.createElement('meta');
+      metaDesc.name = 'description';
+      document.head.appendChild(metaDesc);
+    }
+    const dims = product.dimensions ? ` Dimensions: ${product.dimensions}.` : '';
+    const wgt = product.weight ? ` Weight: ${product.weight} kg.` : '';
+    metaDesc.content = `Discover our premium Petrified Wood ${product.name}. Authentic, handcrafted fossil wood furniture from Indonesia.${dims}${wgt} SKU: ${product.id}.`;
   }
 
   /* ---- Build related products carousel ---- */
