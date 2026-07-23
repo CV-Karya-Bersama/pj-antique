@@ -242,18 +242,7 @@ function buildJsonLd(product, title, description, image, url) {
         "addressCountry": "ID"
       }
     },
-    "material": "Petrified Wood",
-    "offers": {
-      "@type": "Offer",
-      "url": url,
-      "priceCurrency": "IDR",
-      "availability": getAvailabilitySchema(product.stock),
-      "seller": {
-        "@type": "Organization",
-        "name": BRAND_NAME,
-        "url": SITE_URL
-      }
-    }
+    "material": "Petrified Wood"
   };
 
   if (product.dimensions) schema.depth = product.dimensions;
