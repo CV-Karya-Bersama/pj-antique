@@ -31,10 +31,49 @@ export async function fetchAndParseProducts() {
  * fallback_image | SKU | Name | Dimensions | Weight | Stock | Image
  */
 export function parseCSV(text) {
-  const lines = text.split('\n').map(l => l.trim()).filter(Boolean);
-  if (lines.length < 2) return [];
+  const rows = [];
+  let currentRow = [];
+  let currentCell = '';
+  let inQuotes = false;
 
-  const headers = parseRow(lines[0]).map(h => h.trim().toLowerCase().replace(/\s+/g, '_'));
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
+    const nextCh = text[i + 1];
+
+    if (ch === '"') {
+      if (inQuotes && nextCh === '"') {
+        currentCell += '"';
+        i++; // skip escaped quote
+      } else {
+        inQuotes = !inQuotes;
+      }
+    } else if (ch === ',' && !inQuotes) {
+      currentRow.push(currentCell);
+      currentCell = '';
+    } else if ((ch === '\n' || ch === '\r') && !inQuotes) {
+      if (ch === '\r' && nextCh === '\n') i++; // skip \n in \r\n
+      currentRow.push(currentCell);
+      if (currentRow.length > 1 || currentRow[0].trim() !== '') {
+        rows.push(currentRow);
+      }
+      currentRow = [];
+      currentCell = '';
+    } else {
+      currentCell += ch;
+    }
+  }
+
+  // Push the final cell and row
+  if (currentCell !== '' || currentRow.length > 0) {
+    currentRow.push(currentCell);
+    if (currentRow.length > 1 || currentRow[0].trim() !== '') {
+      rows.push(currentRow);
+    }
+  }
+
+  if (rows.length < 2) return [];
+
+  const headers = rows[0].map(h => h.trim().toLowerCase().replace(/\s+/g, '_'));
   const idx = name => headers.indexOf(name);
 
   const COL = {
@@ -55,8 +94,8 @@ export function parseCSV(text) {
 
   const products = [];
 
-  for (let i = 1; i < lines.length; i++) {
-    const cols = parseRow(lines[i]);
+  for (let i = 1; i < rows.length; i++) {
+    const cols = rows[i];
     const name = (cols[COL.name] || '').trim();
     if (!name) continue;
 
@@ -74,7 +113,7 @@ export function parseCSV(text) {
       id:            (cols[COL.sku] || `PROD-${i}`).trim(),
       no:            (cols[COL.no] || String(i)).trim(),
       category:      normCat,
-      categoryLabel: normalisedLabel(rawCategory),  // human-readable, preserves original case
+      categoryLabel: normalisedLabel(rawCategory),
       name,
       shortDesc:     (cols[COL.shortDesc]   || '').trim(),
       description:   (cols[COL.description] || '').trim(),
@@ -89,27 +128,6 @@ export function parseCSV(text) {
   }
 
   return products;
-}
-
-/** Parse one CSV row, handling quoted fields that contain commas */
-function parseRow(row) {
-  const result = [];
-  let inQuotes = false;
-  let current = '';
-
-  for (let i = 0; i < row.length; i++) {
-    const ch = row[i];
-    if (ch === '"') {
-      if (inQuotes && row[i + 1] === '"') { current += '"'; i++; }
-      else inQuotes = !inQuotes;
-    } else if (ch === ',' && !inQuotes) {
-      result.push(current); current = '';
-    } else {
-      current += ch;
-    }
-  }
-  result.push(current);
-  return result;
 }
 
 /**
