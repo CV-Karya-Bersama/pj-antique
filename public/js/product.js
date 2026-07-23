@@ -47,6 +47,8 @@
     }
     if (bcName) bcName.textContent = product.name;
 
+    const catLabel = product.categoryLabel || window.PJA.getCategoryLabel(product.category, categories);
+
     // Build image gallery markup
     const thumbsHTML = product.images.map((img, i) =>
       `<img src="${window.PJA.resolveImage(product, i)}" alt="Petrified Wood ${product.name} — ${catLabel} — View ${i + 1}"
@@ -71,7 +73,6 @@
           <span class="product-spec__val">${s.val}</span>
         </div>`).join('');
 
-    const catLabel = product.categoryLabel || window.PJA.getCategoryLabel(product.category);
 
     container.innerHTML = `
       <!-- GALLERY -->
