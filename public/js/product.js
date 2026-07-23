@@ -52,7 +52,7 @@
       `<img src="${window.PJA.resolveImage(product, i)}" alt="Petrified Wood ${product.name} — ${catLabel} — View ${i + 1}"
             class="product-gallery__thumb ${i === 0 ? 'active' : ''}"
             loading="lazy"
-            onerror="this.src='${product.fallbackImage || 'images/prod_coffee_table.png'}';this.onerror=null;">`
+            onerror="this.src='${product.fallbackImage || '/images/prod_coffee_table.png'}';this.onerror=null;">`
     ).join('');
 
     // Build specs table
@@ -78,7 +78,7 @@
       <div class="product-gallery" data-animate="left">
         <div class="product-gallery__main">
           <img src="${window.PJA.resolveImage(product)}" alt="Petrified Wood ${product.name} — ${catLabel} Collection" loading="eager"
-               onerror="this.src='${product.fallbackImage || 'images/prod_coffee_table.png'}';this.onerror=null;">
+               onerror="this.src='${product.fallbackImage || '/images/prod_coffee_table.png'}';this.onerror=null;">
         </div>
         ${product.images.length > 1 ? `<div class="product-gallery__thumbs">${thumbsHTML}</div>` : ''}
       </div>
@@ -87,7 +87,6 @@
       <div class="product-info" data-animate="right">
         <p class="label" style="margin-bottom:0.5rem;">${catLabel}</p>
         <h1 class="product-info__name">${product.name}</h1>
-        <p class="product-info__desc">${product.description}</p>
 
         <div class="product-specs">
           ${specsHTML}
@@ -165,8 +164,9 @@
     .then(products => {
       const product = products.find(p => p.id === productId);
       if (!product) { window.location.href = 'collections.html'; return; }
-      renderProduct(product, window.PJA.CATEGORIES);
-      renderRelated(product, products, window.PJA.CATEGORIES);
+      const categories = window.PJA.loadCategories(products);
+      renderProduct(product, categories);
+      renderRelated(product, products, categories);
     })
     .catch(err => {
       console.error('Failed to load product data:', err);

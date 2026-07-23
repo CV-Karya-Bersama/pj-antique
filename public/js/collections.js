@@ -13,15 +13,23 @@
   const urlParams = new URLSearchParams(window.location.search);
   const initCat   = urlParams.get('cat') || 'all';
 
+  const PAGE_SIZE = 24;
+  let currentPage = 1;
+  let currentFiltered = [];
+
   /* ──────────────────────────────────────────────────────────
      RENDER PRODUCT GRID
   ────────────────────────────────────────────────────────── */
-  function renderGrid(products) {
+  function renderGrid(products, append = false) {
     const grid = document.getElementById('productsGrid');
     if (!grid) return;
-    grid.innerHTML = '';
+    
+    if (!append) {
+      grid.innerHTML = '';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
 
-    if (products.length === 0) {
+    if (products.length === 0 && !append) {
       grid.innerHTML = '<p class="no-results">No pieces found in this category.</p>';
       return;
     }
@@ -29,7 +37,7 @@
     products.forEach((p, i) => {
       const catLabel = p.categoryLabel || window.PJA.getCategoryLabel(p.category, allCategories);
       const imgSrc   = window.PJA.resolveImage(p);
-      const fbSrc    = p.fallbackImage || 'images/prod_coffee_table.png';
+      const fbSrc    = p.fallbackImage || '/images/prod_coffee_table.png';
 
       const card = document.createElement('a');
       card.href      = `product.html?id=${encodeURIComponent(p.id)}`;
@@ -49,8 +57,9 @@
         <div class="prod-card__info">
           <p class="prod-card__cat">${catLabel}</p>
           <h3 class="prod-card__name">${p.name}</h3>
-          <p class="prod-card__short">${p.shortDesc}</p>
+          <p class="prod-card__short" style="font-size: 0.85rem; color: var(--warm-gray); margin-top: 0.25rem;">SKU: ${p.id}</p>
           ${p.dimensions ? `<p class="prod-card__dim">${p.dimensions}</p>` : ''}
+          ${p.weight ? `<p class="prod-card__dim">${p.weight} kg</p>` : ''}
           <span class="prod-card__action">View Details</span>
         </div>
       `;
@@ -65,9 +74,45 @@
           if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
         });
       }, { threshold: 0.06 });
-      grid.querySelectorAll('[data-animate]').forEach(el => io.observe(el));
+      grid.querySelectorAll('[data-animate]:not(.visible)').forEach(el => io.observe(el));
     } else {
-      grid.querySelectorAll('[data-animate]').forEach(el => el.classList.add('visible'));
+      grid.querySelectorAll('[data-animate]:not(.visible)').forEach(el => el.classList.add('visible'));
+    }
+
+    renderLoadMoreButton();
+  }
+
+  function renderLoadMoreButton() {
+    const grid = document.getElementById('productsGrid');
+    let btnWrap = document.getElementById('loadMoreWrap');
+    
+    if (currentPage * PAGE_SIZE >= currentFiltered.length) {
+      if (btnWrap) btnWrap.remove();
+      return;
+    }
+
+    if (!btnWrap) {
+      btnWrap = document.createElement('div');
+      btnWrap.id = 'loadMoreWrap';
+      btnWrap.style.textAlign = 'center';
+      btnWrap.style.marginTop = '3rem';
+      btnWrap.style.gridColumn = '1 / -1';
+      
+      const btn = document.createElement('button');
+      btn.className = 'btn btn--dark';
+      btn.textContent = 'Load More';
+      btn.addEventListener('click', () => {
+        const start = currentPage * PAGE_SIZE;
+        const end = start + PAGE_SIZE;
+        currentPage++;
+        renderGrid(currentFiltered.slice(start, end), true);
+      });
+      
+      btnWrap.appendChild(btn);
+      grid.appendChild(btnWrap);
+    } else {
+      // Move it to the end of the grid
+      grid.appendChild(btnWrap);
     }
   }
 
@@ -76,16 +121,18 @@
   ────────────────────────────────────────────────────────── */
   function applyFilter(cat) {
     activeFilter = cat;
-    const filtered = cat === 'all'
+    currentPage = 1;
+    currentFiltered = cat === 'all'
       ? allProducts
       : allProducts.filter(p => p.category === cat);
-    renderGrid(filtered);
+      
+    renderGrid(currentFiltered.slice(0, PAGE_SIZE));
 
     // Update result count
     const countEl = document.getElementById('resultCount');
     if (countEl) {
       const label = cat === 'all' ? 'all pieces' : allCategories.find(c => c.id === cat)?.label || cat;
-      countEl.textContent = `${filtered.length} ${filtered.length === 1 ? 'piece' : 'pieces'}${cat !== 'all' ? ` in ${label}` : ''}`;
+      countEl.textContent = `${currentFiltered.length} ${currentFiltered.length === 1 ? 'piece' : 'pieces'}${cat !== 'all' ? ` in ${label}` : ''}`;
     }
   }
 
