@@ -153,10 +153,11 @@ h4 { font-size: clamp(1.1rem, 1.8vw, 1.4rem); }
   padding: 8px;
 }
 .nav__hamburger span {
-  width: 24px; height: 1px;
+  display: block; width: 24px; height: 2px;
   background: var(--white);
-  transition: background 0.4s;
+  transition: transform 0.3s, opacity 0.3s, background 0.3s;
 }
+.nav.dark-mode .nav__hamburger span { background: var(--white); }
 .nav.scrolled .nav__hamburger span { background: var(--espresso); }
 
 /* Mobile menu */
@@ -192,8 +193,12 @@ h4 { font-size: clamp(1.1rem, 1.8vw, 1.4rem); }
 
 @media (max-width: 768px) {
   .nav__links { display: none; }
-  .nav__hamburger { display: flex; }
-  .nav__inner { grid-template-columns: 1fr auto 1fr; }
+  .nav__hamburger { display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 6px; }
+  .nav__inner { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+  }
 }
 
 /* ============================================================

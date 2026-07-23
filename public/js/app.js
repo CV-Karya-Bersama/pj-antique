@@ -14,7 +14,39 @@
   const nav = document.getElementById('mainNav');
   const hamburger = document.getElementById('navHamburger');
   const mobileMenu = document.getElementById('mobileMenu');
-  const mobileClose = document.getElementById('mobileClose');
+  const navLinks = document.querySelectorAll('.nav__mobile .nav__link');
+
+  function closeMobileMenu() {
+    mobileMenu.classList.remove('active');
+    hamburger.setAttribute('aria-expanded', 'false');
+    const spans = hamburger.querySelectorAll('span');
+    spans[0].style.transform = 'none';
+    spans[1].style.opacity = '1';
+    spans[2].style.transform = 'none';
+  }
+
+  if (hamburger && mobileMenu) {
+    hamburger.addEventListener('click', () => {
+      const isOpen = mobileMenu.classList.contains('active');
+      if (isOpen) {
+        closeMobileMenu();
+      } else {
+        mobileMenu.classList.add('active');
+        hamburger.setAttribute('aria-expanded', 'true');
+        const spans = hamburger.querySelectorAll('span');
+        spans[0].style.transform = 'translateY(8px) rotate(45deg)';
+        spans[1].style.opacity = '0';
+        spans[2].style.transform = 'translateY(-8px) rotate(-45deg)';
+      }
+    });
+
+    navLinks.forEach(link => link.addEventListener('click', closeMobileMenu));
+    
+    // Allow clicking outside the links to close
+    mobileMenu.addEventListener('click', (e) => {
+      if (e.target === mobileMenu) closeMobileMenu();
+    });
+  }
 
   // Scroll behaviour: transparent → scrolled
   if (nav && nav.classList.contains('transparent')) {
@@ -29,22 +61,6 @@
     };
     window.addEventListener('scroll', onScroll, { passive: true });
     onScroll();
-  }
-
-  // Mobile menu toggle
-  if (hamburger && mobileMenu) {
-    hamburger.addEventListener('click', () => {
-      mobileMenu.classList.add('open');
-      hamburger.setAttribute('aria-expanded', 'true');
-      document.body.style.overflow = 'hidden';
-    });
-  }
-  if (mobileClose && mobileMenu) {
-    mobileClose.addEventListener('click', () => {
-      mobileMenu.classList.remove('open');
-      if (hamburger) hamburger.setAttribute('aria-expanded', 'false');
-      document.body.style.overflow = '';
-    });
   }
 
   /* ---------- Hero Image Zoom ---------- */
@@ -100,9 +116,14 @@
       if (!href || href.startsWith('#') || href.startsWith('tel:') || href.startsWith('mailto:') || href.startsWith('http')) return;
       link.addEventListener('click', (e) => {
         e.preventDefault();
-        transitionEl.classList.add('active');
-        setTimeout(() => { window.location.href = href; }, 350);
+        transitionEl.style.opacity = '1';
+        setTimeout(() => { window.location.href = href; }, 400);
       });
+    });
+
+    // Fix bfcache (back button freeze)
+    window.addEventListener('pageshow', (event) => {
+      transitionEl.style.opacity = '0';
     });
   }
 

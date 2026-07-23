@@ -27,15 +27,15 @@
 <nav class="nav dark-mode scrolled" id="mainNav" role="navigation" aria-label="Main navigation">
   <div class="nav__inner">
     <ul class="nav__links" role="list">
-      <li><a href="index.html" class="nav__link" id="nav-home">Home</a></li>
-      <li><a href="collections.html" class="nav__link" id="nav-collections">Collections</a></li>
-      <li><a href="about.html" class="nav__link" id="nav-about">Our Story</a></li>
+      <li><a href="/" class="nav__link" id="nav-home">Home</a></li>
+      <li><a href="/collections" class="nav__link" id="nav-collections">Collections</a></li>
+      <li><a href="/about" class="nav__link" id="nav-about">Our Story</a></li>
     </ul>
-    <a href="index.html" class="nav__logo" aria-label="Putra Jambu Antique — Home">
+    <a href="/" class="nav__logo" aria-label="Putra Jambu Antique — Home">
       <img src="images/PJA Header Logo_No_White_Background_1.png" alt="Putra Jambu Antique" class="nav__logo-img" height="42" style="height:42px;width:auto;display:block;filter:invert(1) brightness(10) saturate(0);">
     </a>
     <ul class="nav__links nav__links--right" role="list">
-      <li><a href="contact.html" class="nav__link active" id="nav-contact">Visit Us</a></li>
+      <li><a href="/contact" class="nav__link active" id="nav-contact">Visit Us</a></li>
       <li><a href="tel:+6285695564699" class="nav__link" id="nav-phone">+62 856-9556-4699</a></li>
     </ul>
     <button class="nav__hamburger" id="navHamburger" aria-label="Open menu" aria-expanded="false">
@@ -46,10 +46,10 @@
 
 <div class="nav__mobile" id="mobileMenu" role="dialog" aria-modal="true">
   <button class="nav__mobile-close" id="mobileClose" aria-label="Close menu">&#215;</button>
-  <a href="index.html">Home</a>
-  <a href="collections.html">Collections</a>
-  <a href="about.html">Our Story</a>
-  <a href="contact.html">Visit Us</a>
+  <a href="/">Home</a>
+  <a href="/collections">Collections</a>
+  <a href="/about">Our Story</a>
+  <a href="/contact">Visit Us</a>
 </div>
 
 <!-- CONTACT LAYOUT -->
@@ -139,11 +139,11 @@
     <p>Whether you're looking for a specific piece, want to arrange a showroom visit, or have a custom commission in mind — reach out and we'll respond within 24 hours.</p>
 
     <!-- Formspree AJAX success/error messages -->
-    <div data-fs-success class="form-success" style="display:none">
+    <div id="formSuccess" class="form-success" style="display:none; padding:1rem; background:#E5F0E5; color:#2D4A2D; margin-bottom:1rem;">
       ✓ Message sent! We'll be in touch within 24 hours.
     </div>
-    <div data-fs-error class="form-error" style="display:none">
-      Something went wrong. Please try again, or reach us directly at <a href="mailto:info@antique.id">info@antique.id</a> or on <a href="https://wa.me/6285695564699">WhatsApp</a>.
+    <div id="formError" class="form-error" style="display:none; padding:1rem; background:#F0E5E5; color:#4A2D2D; margin-bottom:1rem;">
+      Something went wrong. Please try again, or reach us directly at <a href="mailto:info@antique.id" style="text-decoration:underline;">info@antique.id</a> or on <a href="https://wa.me/6285695564699" style="text-decoration:underline;">WhatsApp</a>.
     </div>
 
     <form id="contactForm" novalidate>
@@ -247,24 +247,24 @@
       <div>
         <p class="footer__col-title">Collections</p>
         <ul class="footer__links">
-          <li><a href="collections.html?cat=living-room">Living Room</a></li>
-          <li><a href="collections.html?cat=bedroom">Bedroom</a></li>
-          <li><a href="collections.html?cat=dining-room">Dining Room</a></li>
-          <li><a href="collections.html?cat=outdoor">Outdoor</a></li>
-          <li><a href="collections.html?cat=decoration">Decoration</a></li>
-          <li><a href="collections.html">All Pieces</a></li>
+          <li><a href="/collections?cat=living-room">Living Room</a></li>
+          <li><a href="/collections?cat=bedroom">Bedroom</a></li>
+          <li><a href="/collections?cat=dining-room">Dining Room</a></li>
+          <li><a href="/collections?cat=outdoor">Outdoor</a></li>
+          <li><a href="/collections?cat=decoration">Decoration</a></li>
+          <li><a href="/collections">All Pieces</a></li>
         </ul>
       </div>
       <div>
         <p class="footer__col-title">Company</p>
         <ul class="footer__links">
-          <li><a href="about.html">Our Story</a></li>
-          <li><a href="contact.html">Visit Showroom</a></li>
-          <li><a href="faq.html">FAQ</a></li>
-          <li><a href="faq.html#how-to-order">How to Order</a></li>
-          <li><a href="sitemap.html">Sitemap</a></li>
-          <li><a href="privacy-policy.html">Privacy Policy</a></li>
-          <li><a href="terms.html">Terms of Use</a></li>
+          <li><a href="/about">Our Story</a></li>
+          <li><a href="/contact">Visit Showroom</a></li>
+          <li><a href="/faq">FAQ</a></li>
+          <li><a href="/faq#how-to-order">How to Order</a></li>
+          <li><a href="/sitemap">Sitemap</a></li>
+          <li><a href="/privacy-policy">Privacy Policy</a></li>
+          <li><a href="/terms">Terms of Use</a></li>
         </ul>
       </div>
       <div>
@@ -288,11 +288,8 @@
 <script src="js/data.js"></script>
 <script src="js/app.js"></script>
 
-<!-- Formspree AJAX — Vanilla JS CDN method -->
+<!-- Contact Form Submission Logic -->
 <script>
-  window.formspree = window.formspree || function () { (formspree.q = formspree.q || []).push(arguments); };
-  formspree('initForm', { formElement: '#contactForm', formId: 'xeeygylw' });
-
   // Pre-fill interest from URL param if coming from product page
   const urlParams = new URLSearchParams(window.location.search);
   const productParam = urlParams.get('product');
@@ -308,7 +305,41 @@
       if (opt) sel.value = opt.value;
     }
   }
+
+  // Handle Formspree Submission Customly
+  const form = document.getElementById('contactForm');
+  const btn = document.getElementById('submitBtn');
+  const msgSuccess = document.getElementById('formSuccess');
+  const msgError = document.getElementById('formError');
+
+  if (form) {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      btn.textContent = 'Sending...';
+      btn.disabled = true;
+      msgSuccess.style.display = 'none';
+      msgError.style.display = 'none';
+
+      try {
+        const res = await fetch('https://formspree.io/f/xeeygylw', {
+          method: 'POST',
+          body: new FormData(form),
+          headers: { 'Accept': 'application/json' }
+        });
+        if (res.ok) {
+          msgSuccess.style.display = 'block';
+          form.reset();
+        } else {
+          throw new Error('Not ok');
+        }
+      } catch (err) {
+        msgError.style.display = 'block';
+      } finally {
+        btn.textContent = 'Send Message →';
+        btn.disabled = false;
+      }
+    });
+  }
 </script>
-<script src="https://unpkg.com/@formspree/ajax@1" defer></script>
 </body>
 </html>

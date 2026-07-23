@@ -10,7 +10,7 @@
   const productId = urlParams.get('id');
 
   if (!productId) {
-    window.location.href = 'collections.html';
+    window.location.href = '/collections';
     return;
   }
 
@@ -69,7 +69,7 @@
     const bcCatLink = document.getElementById('breadcrumb-cat-link');
     const bcName    = document.getElementById('breadcrumb-name');
     if (bcCatLink && cat) {
-      bcCatLink.href = `collections.html?cat=${cat.id}`;
+      bcCatLink.href = `/collections?cat=${cat.id}`;
       bcCatLink.textContent = cat.label;
     }
     if (bcName) bcName.textContent = product.name;
@@ -121,7 +121,7 @@
         </div>
 
         <div class="product-info__cta">
-          <a href="contact.html#contact-form?interest=${product.category}&product=${encodeURIComponent(product.name)}"
+          <a href="/contact#contact-form?interest=${product.category}&product=${encodeURIComponent(product.name)}"
              class="btn btn--dark"
              id="product-enquire-btn">
             Enquire About This Piece
@@ -174,9 +174,9 @@
     related.forEach(p => {
       const cat = categories.find(c => c.id === p.category);
       track.innerHTML += `
-        <a href="product.html?id=${p.id}" class="prod-card" role="listitem">
+        <a href="/product?id=${encodeURIComponent(p.id)}" class="prod-card" data-animate="up">
           <div class="prod-card__img-wrap">
-            <img src="${p.images[0]}" alt="${p.name}" class="prod-card__img" loading="lazy">
+            <img src="${window.PJA.resolveImage(p)}" alt="${p.name}" class="prod-card__img" loading="lazy" onerror="this.src='${p.fallbackImage || '/images/prod_coffee_table.png'}';this.onerror=null;">
           </div>
           <div class="prod-card__info">
             <p class="prod-card__cat">${cat ? cat.label : p.category}</p>
@@ -204,7 +204,7 @@
   window.PJA.loadProducts()
     .then(products => {
       const product = products.find(p => p.id === productId);
-      if (!product) { window.location.href = 'collections.html'; return; }
+      if (!product) { window.location.href = '/collections'; return; }
       const categories = window.PJA.loadCategories(products);
       renderProduct(product, categories);
       renderRelated(product, products, categories);

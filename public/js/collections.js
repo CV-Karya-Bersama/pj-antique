@@ -40,7 +40,7 @@
       const fbSrc    = p.fallbackImage || '/images/prod_coffee_table.png';
 
       const card = document.createElement('a');
-      card.href      = `product.html?id=${encodeURIComponent(p.id)}`;
+      card.href      = `/product?id=${encodeURIComponent(p.id)}`;
       card.className = 'prod-card';
       card.setAttribute('role', 'listitem');
       card.id        = `grid-prod-${p.id}`;
@@ -119,12 +119,17 @@
   /* ──────────────────────────────────────────────────────────
      FILTER LOGIC
   ────────────────────────────────────────────────────────── */
-  function applyFilter(cat) {
+  function applyFilter(cat, query = '') {
     activeFilter = cat;
     currentPage = 1;
-    currentFiltered = cat === 'all'
-      ? allProducts
-      : allProducts.filter(p => p.category === cat);
+    
+    const q = query.toLowerCase().trim();
+    
+    currentFiltered = allProducts.filter(p => {
+      const matchCat = cat === 'all' || p.category === cat;
+      const matchQuery = !q || p.name.toLowerCase().includes(q) || (p.id && p.id.toLowerCase().includes(q));
+      return matchCat && matchQuery;
+    });
       
     renderGrid(currentFiltered.slice(0, PAGE_SIZE));
 
@@ -155,7 +160,10 @@
         const url = new URL(window.location);
         cat === 'all' ? url.searchParams.delete('cat') : url.searchParams.set('cat', cat);
         window.history.replaceState({}, '', url);
-        applyFilter(cat);
+        
+        const searchInput = document.getElementById('searchInput');
+        const query = searchInput ? searchInput.value : '';
+        applyFilter(cat, query);
       });
       return btn;
     };
@@ -188,11 +196,19 @@
       }
 
       applyFilter(activeFilter);
+
+      // Search Event Listener
+      const searchInput = document.getElementById('searchInput');
+      if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+          applyFilter(activeFilter, e.target.value);
+        });
+      }
     })
     .catch(err => {
       console.error('[PJA] Failed to load products:', err);
       const grid = document.getElementById('productsGrid');
-      if (grid) grid.innerHTML = '<p class="no-results">Unable to load products. Please try again or <a href="contact.html">contact us</a>.</p>';
+      if (grid) grid.innerHTML = '<p class="no-results">Unable to load products. Please try again or <a href="/contact">contact us</a>.</p>';
     });
 
 })();
