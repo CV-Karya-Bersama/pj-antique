@@ -18,6 +18,9 @@
   <meta name="twitter:image" content="https://antique.id/images/about_brand.png">
   <link rel="stylesheet" href="css/main.css">
   <link rel="icon" type="image/png" href="images/PJA Square Logo_No_White_Background_1.png">
+
+  <script src="js/data.js" defer></script>
+  <script src="js/app.js" defer></script>
 </head>
 <body>
 
@@ -285,11 +288,9 @@
   </div>
 </footer>
 
-<script src="js/data.js"></script>
-<script src="js/app.js"></script>
-
 <!-- Contact Form Submission Logic -->
 <script>
+  document.addEventListener('DOMContentLoaded', () => {
   // Pre-fill interest from URL param if coming from product page
   const urlParams = new URLSearchParams(window.location.search);
   const productParam = urlParams.get('product');
@@ -340,6 +341,7 @@
       }
     });
   }
+  });
 </script>
 </body>
 </html>

@@ -117,7 +117,10 @@
       link.addEventListener('click', (e) => {
         e.preventDefault();
         transitionEl.style.opacity = '1';
-        setTimeout(() => { window.location.href = href; }, 400);
+        // 2) Wait for CSS transition, then navigate
+        setTimeout(() => {
+          window.location.href = href;
+        }, 200);
       });
     });
 

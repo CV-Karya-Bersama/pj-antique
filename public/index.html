@@ -51,6 +51,9 @@
   </script>
   <link rel="stylesheet" href="css/main.css">
   <link rel="icon" type="image/png" href="images/PJA Square Logo_No_White_Background_1.png">
+
+  <script src="js/data.js" defer></script>
+  <script src="js/app.js" defer></script>
 </head>
 <body>
 
@@ -279,33 +282,33 @@
   </div>
 </footer>
 
-<script src="js/data.js"></script>
-<script src="js/app.js"></script>
 <script>
-  // Load featured products from live Google Sheets via /api/products
-  window.PJA.loadProducts().then(products => {
-      const track = document.getElementById('featuredTrack');
-      const featured = products.filter(p => p.featured);
-      if (!featured.length) { track.innerHTML = '<p style="padding:2rem;color:var(--warm-gray)">No featured products yet.</p>'; return; }
-      featured.forEach(p => {
-        const imgSrc = window.PJA.resolveImage(p);
-        const catLabel = p.categoryLabel || window.PJA.getCategoryLabel(p.category);
-        track.innerHTML += `
-          <a href="/product?id=${p.id}" class="prod-card" role="listitem" id="prod-${p.id}">
-            <div class="prod-card__img-wrap">
-              <img src="${imgSrc}" alt="${p.name}" class="prod-card__img" loading="lazy"
-                   onerror="this.src='${p.fallbackImage || 'images/prod_coffee_table.png'}';this.onerror=null;">
-              <span class="prod-card__badge">Featured</span>
-            </div>
-            <div class="prod-card__info">
-              <p class="prod-card__cat">${catLabel}</p>
-              <h3 class="prod-card__name">${p.name}</h3>
-              <p class="prod-card__short">${p.shortDesc}</p>
-              <span class="prod-card__action">View Details</span>
-            </div>
-          </a>`;
+  document.addEventListener('DOMContentLoaded', () => {
+    // Load featured products from live Google Sheets via /api/products
+    window.PJA.loadProducts().then(products => {
+        const track = document.getElementById('featuredTrack');
+        const featured = products.filter(p => p.featured);
+        if (!featured.length) { track.innerHTML = '<p style="padding:2rem;color:var(--warm-gray)">No featured products yet.</p>'; return; }
+        featured.forEach(p => {
+          const imgSrc = window.PJA.resolveImage(p);
+          const catLabel = p.categoryLabel || window.PJA.getCategoryLabel(p.category);
+          track.innerHTML += `
+            <a href="/product?id=${p.id}" class="prod-card" role="listitem" id="prod-${p.id}">
+              <div class="prod-card__img-wrap">
+                <img src="${imgSrc}" alt="${p.name}" class="prod-card__img" loading="lazy"
+                     onerror="this.src='${p.fallbackImage || 'images/prod_coffee_table.png'}';this.onerror=null;">
+                <span class="prod-card__badge">Featured</span>
+              </div>
+              <div class="prod-card__info">
+                <p class="prod-card__cat">${catLabel}</p>
+                <h3 class="prod-card__name">${p.name}</h3>
+                <p class="prod-card__short">${p.shortDesc}</p>
+                <span class="prod-card__action">View Details</span>
+              </div>
+            </a>`;
+        });
       });
-    });
+  });
 
   // Carousel scroll
   document.getElementById('scrollLeft').addEventListener('click', () => {
@@ -313,6 +316,8 @@
   });
   document.getElementById('scrollRight').addEventListener('click', () => {
     document.getElementById('featuredTrack').scrollBy({ left: 340, behavior: 'smooth' });
+  });
+  
   });
 </script>
 </body>
