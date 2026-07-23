@@ -89,7 +89,7 @@ export function parseCSV(text) {
     dimensions:    idx('dimensions'),
     weight:        idx('weight'),
     stock:         idx('stock'),
-    image:         idx('image'),
+    image:         idx('image') !== -1 ? idx('image') : idx('imageurl'),
   };
 
   const products = [];
