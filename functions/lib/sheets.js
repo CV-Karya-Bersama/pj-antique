@@ -7,12 +7,11 @@
  * Categories are dynamic — derived from the sheet data, not hardcoded.
  */
 
-const SHEET_ID  = '15PkQD_v8Di-8fTIYLMWY7frjy8_OWnBf3TDMzfdlbyU';
-const SHEET_GID = '1576116514';
+// (SHEET_ID and SHEET_GID variables are now part of the direct published URL below)
 const CACHE_TTL = 300;
 
 export async function fetchAndParseProducts() {
-  const csvUrl = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/pub?output=csv&gid=${SHEET_GID}`;
+  const csvUrl = `https://docs.google.com/spreadsheets/d/e/2PACX-1vTMpMdP7Hv7giURb7B2KmOQ0A1ZqgBmi9qFh5dzEr-vFttPOPxPg_sMNN3y0QAIGr-3V5F33K5gz8Dz/pub?gid=1576116514&single=true&output=csv`;
 
   const res = await fetch(csvUrl, {
     cf: { cacheTtl: CACHE_TTL, cacheEverything: true }
