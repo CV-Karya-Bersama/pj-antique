@@ -90,6 +90,7 @@
       { key: 'Dimensions', val: product.dimensions },
       { key: 'Weight',     val: product.weight },
       { key: 'Finish',     val: product.finish },
+      { key: 'Stock',      val: product.stock },
       { key: 'Product ID', val: product.id },
     ];
     const specsHTML = specs
