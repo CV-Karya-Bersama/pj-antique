@@ -139,8 +139,8 @@
                  id="product-enquire-btn">
                 Enquire About This Piece
               </a>
-              <a href="tel:+6285695564699" class="btn btn--ghost" id="product-call-btn">
-                Call Us — +62 856-9556-4699
+              <a href="tel:+6285718233007" class="btn btn--ghost" id="product-call-btn">
+                Call Us — +62 857-1823-3007
               </a>
               <p class="product-info__note">
                 Each piece is unique. Contact us to check availability and arrange a viewing at our Ubud, Bali showroom.
