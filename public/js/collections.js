@@ -121,7 +121,7 @@
   /* ──────────────────────────────────────────────────────────
      FILTER LOGIC
   ────────────────────────────────────────────────────────── */
-  function applyFilter(cat, query = '', sort = 'default', avail = 'all') {
+  function applyFilter(cat, query = '', sort = 'default', avail = 'active') {
     activeFilter = cat;
     currentPage = 1;
     
@@ -193,7 +193,7 @@
         const availSelect = document.getElementById('availabilitySelect');
         const query = searchInput ? searchInput.value : '';
         const sort = sortSelect ? sortSelect.value : 'default';
-        const avail = availSelect ? availSelect.value : 'all';
+        const avail = availSelect ? availSelect.value : 'active';
         applyFilter(cat, query, sort, avail);
       });
       return btn;
@@ -226,19 +226,19 @@
         activeFilter = initCat;
       }
 
-      applyFilter(activeFilter);
-
-      // Search Event Listener
+      // Grab elements
       const searchInput = document.getElementById('searchInput');
       const sortSelect = document.getElementById('sortSelect');
       const availSelect = document.getElementById('availabilitySelect');
+
+      applyFilter(activeFilter, '', 'default', availSelect ? availSelect.value : 'active');
       
       const triggerFilter = () => {
         applyFilter(
           activeFilter, 
           searchInput ? searchInput.value : '', 
           sortSelect ? sortSelect.value : 'default',
-          availSelect ? availSelect.value : 'all'
+          availSelect ? availSelect.value : 'active'
         );
       };
 

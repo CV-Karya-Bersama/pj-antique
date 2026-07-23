@@ -76,8 +76,8 @@
 <div class="search-bar" style="max-width: var(--max-w); margin: 0 auto; padding: 0 var(--page-px) 1rem; display: flex; gap: 1rem; flex-wrap: wrap;">
   <input type="text" id="searchInput" placeholder="Search pieces by Name or SKU..." style="flex:1; min-width:200px; max-width:400px; padding:0.75rem 1rem; border:1px solid var(--border-dark); background:var(--white); color:var(--espresso); font-family:var(--font-sans); font-size:0.9rem;" aria-label="Search pieces">
   <select id="availabilitySelect" style="padding:0.75rem 1rem; border:1px solid var(--border-dark); background:var(--white); color:var(--espresso); font-family:var(--font-sans); font-size:0.9rem; cursor:pointer;" aria-label="Filter by availability">
-    <option value="all">Availability: All Pieces</option>
-    <option value="active">Active Listings (In Stock)</option>
+    <option value="active" selected>Availability: Active Listings</option>
+    <option value="all">All Pieces (Including Sold)</option>
     <option value="sold">Sold Out (Portfolio)</option>
   </select>
   <select id="sortSelect" style="padding:0.75rem 1rem; border:1px solid var(--border-dark); background:var(--white); color:var(--espresso); font-family:var(--font-sans); font-size:0.9rem; cursor:pointer;" aria-label="Sort pieces">
