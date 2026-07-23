@@ -293,7 +293,7 @@
           const imgSrc = window.PJA.resolveImage(p);
           const catLabel = p.categoryLabel || window.PJA.getCategoryLabel(p.category);
           track.innerHTML += `
-            <a href="/product?id=${p.id}" class="prod-card" role="listitem" id="prod-${p.id}">
+            <a href="/product?id=${p.id}" class="prod-card" id="prod-${p.id}">
               <div class="prod-card__img-wrap">
                 <img src="${imgSrc}" alt="${p.name}" class="prod-card__img" loading="lazy"
                      onerror="this.src='${p.fallbackImage || 'images/prod_coffee_table.png'}';this.onerror=null;">

@@ -1,0 +1,13 @@
+# Putra Jambu Antique
+
+This is the LLM-friendly documentation for Putra Jambu Antique website.
+
+## Links
+- [Home Page](/)
+- [Collections](/collections)
+- [Our Story](/about)
+- [Visit Us](/contact)
+- [FAQ](/faq)
+- [Privacy Policy](/privacy-policy)
+- [Terms of Use](/terms)
+- [Sitemap](/sitemap)

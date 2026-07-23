@@ -42,7 +42,6 @@
       const card = document.createElement('a');
       card.href      = `/product?id=${encodeURIComponent(p.id)}`;
       card.className = 'prod-card';
-      card.setAttribute('role', 'listitem');
       card.id        = `grid-prod-${p.id}`;
       card.setAttribute('data-animate', '');
       card.style.transitionDelay = `${(i % 4) * 60}ms`;
