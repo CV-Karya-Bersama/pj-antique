@@ -234,7 +234,7 @@ function buildJsonLd(product, title, description, image, url) {
     },
     "manufacturer": {
       "@type": "Organization",
-      "name": "Petrified Wood Indonesia",
+      "name": "CV Karya Bersama",
       "address": {
         "@type": "PostalAddress",
         "addressLocality": "Ubud",
