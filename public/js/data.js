@@ -18,7 +18,16 @@ window.PJA.loadProducts = async function () {
       const json = await res.json();
       if (json.products && json.products.length > 0) {
         console.info(`[PJA] ${json.products.length} products loaded from Google Sheets (${json.updatedAt})`);
-        return json.products;
+        
+        let products = json.products;
+        // Push sold out items to the bottom, maintaining relative arrival order otherwise
+        products.sort((a, b) => {
+          const aSold = a.stock === '0' || (a.stock && a.stock.toLowerCase().includes('sold')) ? 1 : 0;
+          const bSold = b.stock === '0' || (b.stock && b.stock.toLowerCase().includes('sold')) ? 1 : 0;
+          return aSold - bSold;
+        });
+        
+        return products;
       }
     }
   } catch (e) {
@@ -30,7 +39,15 @@ window.PJA.loadProducts = async function () {
     if (!res.ok) throw new Error('Local JSON not found');
     const json = await res.json();
     console.info(`[PJA] ${json.products.length} products loaded from local products.json`);
-    return json.products;
+    
+    let products = json.products;
+    products.sort((a, b) => {
+      const aSold = a.stock === '0' || (a.stock && a.stock.toLowerCase().includes('sold')) ? 1 : 0;
+      const bSold = b.stock === '0' || (b.stock && b.stock.toLowerCase().includes('sold')) ? 1 : 0;
+      return aSold - bSold;
+    });
+    
+    return products;
   } catch (e) {
     console.error('[PJA] Could not load products from any source.', e);
     return [];

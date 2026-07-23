@@ -109,8 +109,11 @@ export function parseCSV(text) {
     const fallback   = cols[COL.fallbackImage] || '';
     const imageUrl   = resolveImageUrl(rawImage) || resolveImageUrl(fallback) || '';
 
+    const sku = (cols[COL.sku] || '').trim();
+    if (!sku) continue;
+
     products.push({
-      id:            (cols[COL.sku] || `PROD-${i}`).trim(),
+      id:            sku,
       no:            (cols[COL.no] || String(i)).trim(),
       category:      normCat,
       categoryLabel: normalisedLabel(rawCategory),

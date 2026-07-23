@@ -124,19 +124,29 @@
 
         <div class="product-info__cta">
           ${product.stock === '0' 
-            ? `<button class="btn btn--dark" disabled style="opacity: 0.5; cursor: not-allowed; width: 100%;">Sold Out</button>`
-            : `<a href="/contact#contact-form?interest=${product.category}&product=${encodeURIComponent(product.name)}"
+            ? `
+              <div style="background: var(--cream); padding: 1.5rem; border: 1px solid var(--border); margin-bottom: 1.5rem;">
+                <h3 style="font-family: var(--font-display); font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--espresso);">This Piece Has Found a Home</h3>
+                <p style="color: var(--warm-gray); line-height: 1.5; font-size: 0.95rem; margin: 0;">
+                  The piece you are looking for (Ref: ${product.id}) has been sold and removed from our active catalog. Because every petrified wood piece is a unique geological artifact, it cannot be exactly replicated.
+                </p>
+              </div>
+              <a href="/collections?cat=${product.category}" class="btn btn--ghost">Browse Similar Pieces</a>
+            `
+            : `
+              <a href="/contact#contact-form?interest=${product.category}&product=${encodeURIComponent(product.name)}"
                  class="btn btn--dark"
                  id="product-enquire-btn">
                 Enquire About This Piece
-              </a>`
+              </a>
+              <a href="tel:+6285695564699" class="btn btn--ghost" id="product-call-btn">
+                Call Us — +62 856-9556-4699
+              </a>
+              <p class="product-info__note">
+                Each piece is unique. Contact us to check availability and arrange a viewing at our Ubud, Bali showroom.
+              </p>
+            `
           }
-          <a href="tel:+6285695564699" class="btn btn--ghost" id="product-call-btn">
-            Call Us — +62 856-9556-4699
-          </a>
-          <p class="product-info__note">
-            Each piece is unique. Contact us to check availability and arrange a viewing at our Ubud, Bali showroom.
-          </p>
         </div>
       </div>
     `;
@@ -177,7 +187,7 @@
     if (!track) return;
 
     const related = allProducts
-      .filter(p => p.id !== product.id && p.category === product.category)
+      .filter(p => p.id !== product.id && p.category === product.category && p.stock !== '0')
       .slice(0, 6);
 
     if (related.length === 0) {
