@@ -24,10 +24,25 @@ let _productCache = null;
 let _cacheTs = 0;
 const CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
 
-async function getProducts() {
+async function getProducts(env) {
   if (_productCache && Date.now() - _cacheTs < CACHE_TTL_MS) {
     return _productCache;
   }
+  
+  const kv = env?.PRODUCTS_CACHE;
+  if (kv) {
+    try {
+      const cached = await kv.get('products_v1', { type: 'json' });
+      if (cached && cached.products) {
+        _productCache = cached.products;
+        _cacheTs = Date.now();
+        return _productCache;
+      }
+    } catch (e) {
+      console.warn('[middleware] KV read failed:', e.message);
+    }
+  }
+
   _productCache = await fetchAndParseProducts();
   _cacheTs = Date.now();
   return _productCache;
@@ -62,7 +77,7 @@ export async function onRequest({ request, next, env }) {
 
   // ── Route: /sitemap.xml ──────────────────────────────────────────────────
   if (url.pathname === '/sitemap.xml') {
-    return handleSitemap();
+    return handleSitemap(env);
   }
 
   // ── Route: /robots.txt (serve statically if present, else generate) ──────
@@ -92,7 +107,7 @@ export async function onRequest({ request, next, env }) {
   const id = url.searchParams.get('id');
 
   try {
-    const products = await getProducts();
+    const products = await getProducts(env);
     const product  = products.find(p => p.id === id);
 
     if (!product) return next(); // Unknown product — serve static page as-is
@@ -321,12 +336,12 @@ function escapeAttr(str) {
 }
 
 // ─── SITEMAP ───────────────────────────────────────────────────────────────────
-async function handleSitemap() {
+async function handleSitemap(env) {
   let productUrls = '';
   let categoryUrls = '';
 
   try {
-    const products = await getProducts();
+    const products = await getProducts(env);
     
     // Generate Product URLs
     productUrls = products.map(p => `
