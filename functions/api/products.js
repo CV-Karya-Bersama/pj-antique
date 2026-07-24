@@ -15,7 +15,7 @@
 import { fetchAndParseProducts } from '../lib/sheets.js';
 
 const KV_KEY    = 'products_v1';
-const KV_TTL    = 600; // 10 minutes in seconds
+const STALE_AFTER_MS = 5 * 60 * 1000; // 5 minutes (trigger background update if older)
 const HTTP_TTL  = 300; // 5 minutes for browser/CDN HTTP cache
 
 const corsHeaders = {
@@ -31,19 +31,37 @@ export async function onRequest(context) {
 
   const kv = context.env?.PRODUCTS_CACHE;
 
-  // ── 1. Try KV cache first ─────────────────────────────────────────────────
+  // ── 1. Try KV cache first (Stale-While-Revalidate) ────────────────────────
   if (kv) {
     try {
       const cached = await kv.get(KV_KEY, { type: 'json' });
-      if (cached) {
+      if (cached && cached.products) {
+        const ageMs = Date.now() - new Date(cached.updatedAt).getTime();
+        const isStale = ageMs > STALE_AFTER_MS;
+
+        // If it's stale, trigger a background fetch to update the KV cache
+        // for the next user, but don't make the current user wait!
+        if (isStale) {
+          context.waitUntil(
+            fetchAndParseProducts()
+              .then(products => {
+                const payload = { products, updatedAt: new Date().toISOString() };
+                // Put without expirationTtl so the cache lives forever
+                return kv.put(KV_KEY, JSON.stringify(payload));
+              })
+              .catch(e => console.warn('[PJA] Background revalidate failed:', e.message))
+          );
+        }
+
+        // Return the cached data instantly
         return new Response(
-          JSON.stringify({ ...cached, fromCache: true }),
+          JSON.stringify({ ...cached, fromCache: true, stale: isStale }),
           {
             status: 200,
             headers: {
               ...corsHeaders,
               'Cache-Control': `public, max-age=${HTTP_TTL}, s-maxage=${HTTP_TTL}`,
-              'X-Cache': 'HIT',
+              'X-Cache': isStale ? 'STALE' : 'HIT',
             },
           }
         );
@@ -53,15 +71,15 @@ export async function onRequest(context) {
     }
   }
 
-  // ── 2. Cache miss — fetch live from Google Sheets ─────────────────────────
+  // ── 2. Total Cache Miss (only happens once ever) ──────────────────────────
   try {
     const products = await fetchAndParseProducts();
     const payload  = { products, updatedAt: new Date().toISOString() };
 
-    // Write to KV in the background (don't block the response)
+    // Write to KV permanently
     if (kv) {
       context.waitUntil(
-        kv.put(KV_KEY, JSON.stringify(payload), { expirationTtl: KV_TTL })
+        kv.put(KV_KEY, JSON.stringify(payload))
           .catch(e => console.warn('[PJA] KV write failed:', e.message))
       );
     }
