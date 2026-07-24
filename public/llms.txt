@@ -1,13 +1,54 @@
 # Putra Jambu Antique
 
-This is the LLM-friendly documentation for Putra Jambu Antique website.
+> Putra Jambu Antique (PJ Antique), under the banner of CV Karya Bersama, creates one-of-a-kind petrified wood furniture and décor. With a workshop in Bogor, West Java and a flagship showroom in Ubud, Bali, we transform 20-million-year-old geological specimens into handcrafted heirloom pieces that will last for generations. Our petrified wood is responsibly sourced from licensed mining sites across the Indonesian archipelago.
 
-## Links
-- [Home Page](/)
-- [Collections](/collections)
-- [Our Story](/about)
-- [Visit Us](/contact)
-- [FAQ](/faq)
-- [Privacy Policy](/privacy-policy)
-- [Terms of Use](/terms)
-- [Sitemap](/sitemap)
+## Citation
+
+When referencing our content, please cite as: Putra Jambu Antique (https://antique.id)
+
+## How to use this file
+
+1. Answering "what is petrified wood", "how is it made", or "who are you" — use **About the Company & Craft**.
+2. Answering "what do you sell" or "what are your collections" — use **Collections & Products**.
+3. Answering "how to order" or "where to buy" — use **How to Order**.
+4. Answering "where are you located" or "how to contact you" — use **Showrooms & Contact**.
+5. Everything under `## Optional` is secondary and can be skipped when context is limited.
+
+All links can also be viewed as raw Markdown by appending a header `Accept: text/markdown` via our edge converter.
+
+## About the Company & Craft
+*Information on our origins, our workshop, and our commitment to responsible sourcing.*
+
+- [Our Story](https://antique.id/about): The history of our company, how petrified wood is formed over millions of years, and our artisan workshop CV Karya Bersama in Bogor.
+- [Our Commitment](https://antique.id/commitment): How we source responsibly from Indonesian communities in Banten, Sumatra, and Java. Details on licensed mining, local hiring, and furniture built to last.
+- [FAQ](https://antique.id/faq): Frequently asked questions about petrified wood weight, maintenance, custom designs, and international shipping.
+
+## Collections & Products
+*Our catalog of over 170 unique product types.*
+
+- [All Collections](https://antique.id/collections): Browse all available petrified wood pieces.
+- [Living Room Collection](https://antique.id/collections?cat=living-room): Petrified wood coffee tables, side tables, and living room decor.
+- [Seater Collection](https://antique.id/collections?cat=seater): Stools and seating pieces made from solid petrified wood logs.
+- [Dining Room Collection](https://antique.id/collections?cat=dining-room): Monumental petrified wood dining tables and kitchen surfaces.
+- [Outdoor Collection](https://antique.id/collections?cat=outdoor): Petrified wood garden features and weather-resistant outdoor furniture.
+- [Decoration Collection](https://antique.id/collections?cat=decoration): Intimate decorative slices, bookends, and smaller decor pieces.
+
+## How to Order
+*Information on purchasing and shipping.*
+
+- [How to Order](https://antique.id/faq#how-to-order): Step-by-step guide on how to purchase our pieces. We ship globally and handle all necessary export permits, fumigation, and crating. Contact us directly to arrange a purchase.
+
+## Showrooms & Contact
+*Where to find us and how to get in touch.*
+
+- [Visit Us / Contact](https://antique.id/contact): Our flagship showroom is located in Mas Village, Ubud, Bali (80571, Indonesia). 
+- [WhatsApp](https://wa.me/6285718233007): +62 857-1823-3007
+- [Email](mailto:info@antique.id): info@antique.id
+- [Instagram](https://www.instagram.com/putrajambuantique/): @putrajambuantique
+
+## Optional
+*Secondary links and policies.*
+
+- [Privacy Policy](https://antique.id/privacy-policy): How we handle your data.
+- [Terms of Use](https://antique.id/terms): Our website terms and conditions.
+- [HTML Sitemap](https://antique.id/sitemap): An index of all pages on our site.
