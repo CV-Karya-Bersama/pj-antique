@@ -68,7 +68,8 @@
   if (heroBg) {
     const img = new Image();
     img.onload = () => heroBg.classList.add('loaded');
-    img.src = heroBg.style.backgroundImage.slice(5, -2);
+    const match = heroBg.style.backgroundImage.match(/url\(["']?(.*?)["']?\)/);
+    if (match) img.src = match[1];
   }
 
   /* ---------- Scroll Animations (IntersectionObserver) ---------- */
@@ -115,6 +116,9 @@
       const href = link.getAttribute('href');
       if (!href || href.startsWith('#') || href.startsWith('tel:') || href.startsWith('mailto:') || href.startsWith('http')) return;
       link.addEventListener('click', (e) => {
+        // Bypass transition if opening in new tab or using modifier keys
+        if (e.ctrlKey || e.metaKey || e.shiftKey || e.button !== 0 || link.target === '_blank') return;
+        
         e.preventDefault();
         transitionEl.style.opacity = '1';
         // 2) Wait for CSS transition, then navigate

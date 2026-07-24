@@ -115,7 +115,8 @@ export async function onRequest({ request, next, env }) {
         const products = await getProducts(env);
         const product  = products.find(p => p.id === id);
         if (product) {
-          const markdown = generateProductMarkdown(product, url.href);
+          const canonicalUrl = `${url.origin}/product?id=${encodeURIComponent(id)}`;
+          const markdown = generateProductMarkdown(product, canonicalUrl);
           return new Response(markdown, {
             status: 200,
             headers: {
@@ -151,16 +152,10 @@ export async function onRequest({ request, next, env }) {
 
   // ── Route: /sitemap.xml ──────────────────────────────────────────────────
   if (url.pathname === '/sitemap.xml') {
-    return handleSitemap(env);
+    return handleSitemap(env, next);
   }
 
-  // ── Route: /robots.txt (serve statically if present, else generate) ──────
-  if (url.pathname === '/robots.txt') {
-    return new Response(
-      `User-agent: *\nAllow: /\nSitemap: ${SITE_URL}/sitemap.xml\n`,
-      { headers: { 'Content-Type': 'text/plain', 'Cache-Control': 'public, max-age=86400' } }
-    );
-  }
+
 
   // ── Route: /collections.html (Category SEO) ─────────────────────────────
   if (url.pathname === '/collections.html' && url.searchParams.has('cat')) {
@@ -168,7 +163,8 @@ export async function onRequest({ request, next, env }) {
     // Basic protection against empty/invalid cat
     if (cat) {
       const response = await next();
-      return injectCategoryMeta(response, cat, url.href);
+      const canonicalUrl = `${url.origin}/collections?cat=${encodeURIComponent(cat)}`;
+      return injectCategoryMeta(response, cat, canonicalUrl);
     }
   }
 
@@ -187,7 +183,8 @@ export async function onRequest({ request, next, env }) {
     if (!product) return next(); // Unknown product — serve static page as-is
 
     const response = await next(); // Fetch the static product.html
-    return injectProductMeta(response, product, url.href);
+    const canonicalUrl = `${url.origin}/product?id=${encodeURIComponent(id)}`;
+    return injectProductMeta(response, product, canonicalUrl);
 
   } catch (err) {
     console.error('[middleware] Error fetching product meta:', err);
@@ -410,7 +407,7 @@ function escapeAttr(str) {
 }
 
 // ─── SITEMAP ───────────────────────────────────────────────────────────────────
-async function handleSitemap(env) {
+async function handleSitemap(env, next) {
   let productUrls = '';
   let categoryUrls = '';
 
@@ -420,7 +417,7 @@ async function handleSitemap(env) {
     // Generate Product URLs
     productUrls = products.map(p => `
   <url>
-    <loc>${SITE_URL}/product.html?id=${encodeURIComponent(p.id)}</loc>
+    <loc>${SITE_URL}/product?id=${encodeURIComponent(p.id)}</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>`).join('');
@@ -429,7 +426,7 @@ async function handleSitemap(env) {
     const uniqueCats = [...new Set(products.map(p => p.category).filter(Boolean))];
     categoryUrls = uniqueCats.map(cat => `
   <url>
-    <loc>${SITE_URL}/collections.html?cat=${encodeURIComponent(cat)}</loc>
+    <loc>${SITE_URL}/collections?cat=${encodeURIComponent(cat)}</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>`).join('');
@@ -438,36 +435,20 @@ async function handleSitemap(env) {
     console.error('[middleware] Sitemap: could not fetch products', e);
   }
 
-  const xml = `<?xml version="1.0" encoding="UTF-8"?>
-<?xml-stylesheet type="text/xsl" href="/sitemap.xsl"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>${SITE_URL}/</loc>
-    <changefreq>weekly</changefreq>
-    <priority>1.0</priority>
-  </url>
-  <url>
-    <loc>${SITE_URL}/collections.html</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>${SITE_URL}/about.html</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>${SITE_URL}/contact.html</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>${categoryUrls}${productUrls}
-</urlset>`;
+  // Fetch the static public/sitemap.xml which contains our /about, /faq, /commitment, etc.
+  const staticResponse = await next();
+  let xml = await staticResponse.text();
+  
+  // Inject the dynamic routes right before the closing </urlset> tag
+  if (xml.includes('</urlset>')) {
+    xml = xml.replace('</urlset>', `${productUrls}${categoryUrls}</urlset>`);
+  }
 
-  return new Response(xml, {
-    headers: {
+  return new Response(xml, { 
+    headers: { 
       'Content-Type': 'application/xml; charset=utf-8',
-      'Cache-Control': 'public, max-age=3600',
-    }
+      'Cache-Control': 'public, max-age=3600'
+    } 
   });
 }
 
