@@ -113,32 +113,64 @@ function injectProductMeta(response, product, canonicalUrl) {
   const image       = product.images?.[0] || product.fallbackImage || '';
   const jsonLd      = buildJsonLd(product, title, description, image, canonicalUrl);
 
+  // Use a flag to only append JSON-LD once (not replace — it's not in static HTML)
+  let jsonLdAppended = false;
+
   return new HTMLRewriter()
+    // ── Replace <title> ───────────────────────────────────────────────────
     .on('title', {
       element(el) { el.setInnerContent(title); }
     })
+    // ── Replace meta description ──────────────────────────────────────────
     .on('meta[name="description"]', {
       element(el) { el.setAttribute('content', description); }
     })
-    // Inject all OG / Twitter / canonical / JSON-LD into <head>
+    // ── Replace OG tags in-place (so no duplicates reach crawlers) ────────
+    .on('meta[property="og:title"]', {
+      element(el) { el.setAttribute('content', title); }
+    })
+    .on('meta[property="og:description"]', {
+      element(el) { el.setAttribute('content', description); }
+    })
+    .on('meta[property="og:url"]', {
+      element(el) { el.setAttribute('content', canonicalUrl); }
+    })
+    .on('meta[property="og:image"]', {
+      element(el) {
+        if (image) el.setAttribute('content', image);
+      }
+    })
+    .on('meta[property="og:type"]', {
+      element(el) { el.setAttribute('content', 'product'); }
+    })
+    // ── Replace Twitter card tags in-place ────────────────────────────────
+    .on('meta[name="twitter:title"]', {
+      element(el) { el.setAttribute('content', title); }
+    })
+    .on('meta[name="twitter:description"]', {
+      element(el) { el.setAttribute('content', description); }
+    })
+    .on('meta[name="twitter:image"]', {
+      element(el) {
+        if (image) el.setAttribute('content', image);
+      }
+    })
+    // ── Replace existing canonical if present, otherwise we append below ──
+    .on('link[rel="canonical"]', {
+      element(el) { el.setAttribute('href', canonicalUrl); }
+    })
+    // ── Append only what doesn't exist in the static HTML (JSON-LD) ───────
     .on('head', {
       element(el) {
-        el.append(`
-  <link rel="canonical" href="${canonicalUrl}">
-  <meta property="og:title" content="${escapeAttr(title)}">
-  <meta property="og:description" content="${escapeAttr(description)}">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="${canonicalUrl}">
-  ${image ? `<meta property="og:image" content="${escapeAttr(image)}">` : ''}
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="${escapeAttr(title)}">
-  <meta name="twitter:description" content="${escapeAttr(description)}">
-  ${image ? `<meta name="twitter:image" content="${escapeAttr(image)}">` : ''}
-  <script type="application/ld+json">${jsonLd}</script>`, { html: true });
+        if (!jsonLdAppended) {
+          jsonLdAppended = true;
+          el.append(`<script type="application/ld+json">${jsonLd}</script>`, { html: true });
+        }
       }
     })
     .transform(response);
 }
+
 
 function injectCategoryMeta(response, catId, canonicalUrl) {
   // Convert 'living-room' to 'Living Room'
