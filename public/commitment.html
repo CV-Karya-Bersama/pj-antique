@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Our Commitment — Putra Jambu Antique</title>
+  <meta name="description" content="How Putra Jambu Antique and CV Karya Bersama source responsibly from Indonesian communities in Banten, Sumatra and Java — licensed mining, local hiring, and generational craftsmanship.">
+  <meta property="og:title" content="Our Commitment — Putra Jambu Antique">
+  <meta property="og:description" content="Responsibly sourced from Indonesian communities. Licensed mining, local hiring, and furniture built to last for generations.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://antique.id/commitment">
+  <meta property="og:image" content="https://antique.id/images/about_brand2.png">
+  <meta property="og:site_name" content="Putra Jambu Antique">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Our Commitment — Putra Jambu Antique">
+  <meta name="twitter:description" content="Responsibly sourced from Indonesian communities. Licensed mining, local hiring, and furniture built to last for generations.">
+  <meta name="twitter:image" content="https://antique.id/images/about_brand2.png">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://antique.id/commitment">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="icon" type="image/png" href="images/PJA Square Logo_No_White_Background_1.png">
+  <link rel="preload" as="image" href="images/about_brand2.png">
+
+  <script src="js/app.js" defer></script>
+
+  <style>
+    /* ── Commitment page ─────────────────────────────── */
+    .commit-hero {
+      position: relative;
+      height: 90vh;
+      min-height: 520px;
+      display: flex;
+      align-items: flex-end;
+      overflow: hidden;
+    }
+    .commit-hero__bg {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center 30%;
+      transform: scale(1.06);
+      transition: transform 8s ease-out;
+    }
+    .commit-hero__bg.loaded { transform: scale(1); }
+    .commit-hero__overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(30,20,10,0.82) 0%, rgba(30,20,10,0.25) 60%, transparent 100%);
+    }
+    .commit-hero__content {
+      position: relative;
+      z-index: 1;
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 var(--page-px) 5rem;
+      color: var(--white);
+      width: 100%;
+    }
+    .commit-hero__content .label { color: rgba(255,255,255,0.7); margin-bottom: 1rem; }
+    .commit-hero__content h1 {
+      font-family: var(--font-display);
+      font-size: clamp(2.8rem, 7vw, 5.5rem);
+      font-weight: 300;
+      line-height: 1.05;
+      max-width: 700px;
+    }
+    .commit-hero__content p {
+      margin-top: 1.5rem;
+      max-width: 520px;
+      color: rgba(255,255,255,0.8);
+      font-size: 1.05rem;
+      line-height: 1.7;
+    }
+
+    /* ── Pillar grid ─────────────────────────────────── */
+    .commit-pillars {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+      border-top: 1px solid var(--border);
+    }
+    @media (max-width: 768px) { .commit-pillars { grid-template-columns: 1fr; } }
+
+    .commit-pillar {
+      padding: 3.5rem var(--page-px);
+      border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      transition: background 0.3s;
+    }
+    .commit-pillar:last-child { border-right: none; }
+    .commit-pillar:hover { background: var(--cream); }
+    .commit-pillar__icon {
+      font-size: 2rem;
+      margin-bottom: 1.25rem;
+      display: block;
+    }
+    .commit-pillar__title {
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      font-weight: 400;
+      color: var(--espresso);
+      margin-bottom: 0.75rem;
+    }
+    .commit-pillar p {
+      font-size: 0.92rem;
+      color: var(--warm-gray);
+      line-height: 1.75;
+    }
+
+    /* ── Split sections ──────────────────────────────── */
+    .commit-split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 60vh;
+      border-top: 1px solid var(--border);
+    }
+    @media (max-width: 768px) {
+      .commit-split { grid-template-columns: 1fr; }
+      .commit-split--reverse .commit-split__img { order: -1; }
+    }
+    .commit-split__img {
+      position: relative;
+      overflow: hidden;
+      min-height: 420px;
+    }
+    .commit-split__img img {
+      position: absolute;
+      inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      object-position: center;
+      transition: transform 0.9s var(--ease-out);
+    }
+    .commit-split:hover .commit-split__img img { transform: scale(1.04); }
+    .commit-split__copy {
+      padding: 4rem 3.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      background: var(--white);
+    }
+    @media (max-width: 900px) { .commit-split__copy { padding: 3rem var(--page-px); } }
+    .commit-split__copy .label { margin-bottom: 0.75rem; }
+    .commit-split__copy h2 {
+      font-family: var(--font-display);
+      font-size: clamp(1.8rem, 3vw, 2.6rem);
+      font-weight: 300;
+      color: var(--espresso);
+      margin-bottom: 1.25rem;
+      line-height: 1.2;
+    }
+    .commit-split__copy p {
+      color: var(--warm-gray);
+      line-height: 1.8;
+      margin-bottom: 1rem;
+      font-size: 0.95rem;
+    }
+    .commit-split__copy p:last-of-type { margin-bottom: 0; }
+
+    /* ── Source map ──────────────────────────────────── */
+    .commit-sources {
+      background: var(--espresso);
+      color: var(--white);
+      padding: 5rem var(--page-px);
+    }
+    .commit-sources__inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+    }
+    .commit-sources__header { text-align: center; margin-bottom: 3.5rem; }
+    .commit-sources__header .label { color: rgba(255,255,255,0.5); margin-bottom: 0.75rem; }
+    .commit-sources__header h2 {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 300;
+      line-height: 1.2;
+    }
+    .commit-sources__header p {
+      max-width: 560px;
+      margin: 1rem auto 0;
+      color: rgba(255,255,255,0.65);
+      line-height: 1.7;
+      font-size: 0.95rem;
+    }
+    .commit-sources__grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2px;
+      background: rgba(255,255,255,0.08);
+    }
+    .commit-source-item {
+      background: var(--espresso);
+      padding: 2.5rem 2rem;
+      transition: background 0.3s;
+    }
+    .commit-source-item:hover { background: rgba(255,255,255,0.07); }
+    .commit-source-item__region {
+      font-size: 0.6rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.45);
+      margin-bottom: 0.5rem;
+    }
+    .commit-source-item__name {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      font-weight: 300;
+      margin-bottom: 0.75rem;
+    }
+    .commit-source-item__desc {
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.6);
+      line-height: 1.65;
+    }
+
+    /* ── Showroom presence ───────────────────────────── */
+    .commit-presence {
+      padding: 5rem var(--page-px);
+      max-width: var(--max-w);
+      margin: 0 auto;
+    }
+    .commit-presence__header { text-align: center; margin-bottom: 3rem; }
+    .commit-presence__header .label { margin-bottom: 0.75rem; }
+    .commit-presence__header h2 {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 300;
+      color: var(--espresso);
+    }
+    .commit-locations {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+      margin-top: 2.5rem;
+    }
+    @media (max-width: 768px) { .commit-locations { grid-template-columns: 1fr; } }
+    .commit-location {
+      border: 1px solid var(--border);
+      padding: 2.5rem 2rem;
+      transition: box-shadow 0.3s, transform 0.3s;
+    }
+    .commit-location:hover {
+      box-shadow: 0 8px 32px rgba(80,50,20,0.1);
+      transform: translateY(-3px);
+    }
+    .commit-location__tag {
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--warm-gray);
+      margin-bottom: 0.75rem;
+    }
+    .commit-location__name {
+      font-family: var(--font-display);
+      font-size: 1.6rem;
+      font-weight: 300;
+      color: var(--espresso);
+      margin-bottom: 0.5rem;
+    }
+    .commit-location__address {
+      font-size: 0.88rem;
+      color: var(--warm-gray);
+      line-height: 1.65;
+    }
+    .commit-location__role {
+      display: inline-block;
+      margin-top: 1.25rem;
+      font-size: 0.65rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      border: 1px solid var(--border-dark);
+      padding: 0.35rem 0.85rem;
+      color: var(--espresso);
+    }
+
+    /* ── Legacy quote ────────────────────────────────── */
+    .commit-legacy {
+      background: var(--cream);
+      padding: 6rem var(--page-px);
+      text-align: center;
+      border-top: 1px solid var(--border);
+    }
+    .commit-legacy__inner { max-width: 740px; margin: 0 auto; }
+    .commit-legacy blockquote {
+      font-family: var(--font-display);
+      font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+      font-weight: 300;
+      font-style: italic;
+      color: var(--espresso);
+      line-height: 1.4;
+      border: none;
+      padding: 0;
+      margin: 0 0 2rem;
+    }
+    .commit-legacy p {
+      font-size: 0.88rem;
+      color: var(--warm-gray);
+      letter-spacing: 0.08em;
+    }
+  </style>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "Our Commitment — Putra Jambu Antique",
+    "description": "How Putra Jambu Antique and CV Karya Bersama source responsibly from Indonesian communities, with licensed mining, local hiring, and furniture built for generations.",
+    "url": "https://antique.id/commitment",
+    "publisher": {
+      "@type": "Organization",
+      "name": "Putra Jambu Antique",
+      "url": "https://antique.id"
+    }
+  }
+  </script>
+</head>
+<body>
+
+<div class="page-transition" id="pageTransition"></div>
+
+<!-- NAVIGATION -->
+<nav class="nav transparent" id="mainNav" role="navigation" aria-label="Main navigation">
+  <div class="nav__inner">
+    <ul class="nav__links" role="list">
+      <li><a href="/" class="nav__link" id="nav-home">Home</a></li>
+      <li><a href="/collections" class="nav__link" id="nav-collections">Collections</a></li>
+      <li><a href="/about" class="nav__link" id="nav-about">Our Story</a></li>
+    </ul>
+    <a href="/" class="nav__logo" aria-label="Putra Jambu Antique — Home">
+      <img src="images/PJA Header Logo_No_White_Background_1.png" alt="Putra Jambu Antique" class="nav__logo-img" height="42" style="height:42px;width:auto;display:block;">
+    </a>
+    <ul class="nav__links nav__links--right" role="list">
+      <li><a href="/contact" class="nav__link" id="nav-contact">Visit Us</a></li>
+      <li><a href="tel:+6285718233007" class="nav__link" id="nav-phone">+62 857-1823-3007</a></li>
+    </ul>
+    <button class="nav__hamburger" id="navHamburger" aria-label="Open menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<div class="nav__mobile" id="mobileMenu" role="dialog" aria-modal="true">
+  <button class="nav__mobile-close" id="mobileClose" aria-label="Close menu">&#215;</button>
+  <a href="/">Home</a>
+  <a href="/collections">Collections</a>
+  <a href="/about">Our Story</a>
+  <a href="/contact">Visit Us</a>
+  <a href="tel:+6285718233007">+62 857-1823-3007</a>
+</div>
+
+<!-- HERO -->
+<section class="commit-hero" aria-labelledby="commit-title">
+  <div class="commit-hero__bg" id="commitHeroBg" style="background-image: url('images/about_brand2.png')"></div>
+  <div class="commit-hero__overlay"></div>
+  <div class="commit-hero__content">
+    <p class="label">CV Karya Bersama · Est. Bogor, Indonesia</p>
+    <h1 id="commit-title">Our Commitment<br>to a Better World</h1>
+    <p>From the forests of Banten to showrooms in Bali and Yogyakarta — every piece we make carries a responsibility to the land, the communities, and the generations who will inherit it.</p>
+  </div>
+</section>
+
+<!-- THREE PILLARS -->
+<main id="main-content">
+  <section class="commit-pillars" aria-label="Our commitments">
+    <div class="commit-pillar" data-animate>
+      <span class="commit-pillar__icon" aria-hidden="true">🌿</span>
+      <p class="commit-pillar__title">Responsibly Sourced</p>
+      <p>Every raw specimen is extracted under licensed mining operations with proper concession rights. We do not support or purchase from illegal excavation sites. Our supply chain from Banten, Sumatra, and Java is fully traceable.</p>
+    </div>
+    <div class="commit-pillar" data-animate style="transition-delay:80ms;">
+      <span class="commit-pillar__icon" aria-hidden="true">🤝</span>
+      <p class="commit-pillar__title">Community First</p>
+      <p>CV Karya Bersama prioritises hiring from the local native communities near our sourcing and workshop sites. Our craftsmen in Bogor are trained in-house, building generational skills and livelihoods within the communities where we operate.</p>
+    </div>
+    <div class="commit-pillar" data-animate style="transition-delay:160ms;">
+      <span class="commit-pillar__icon" aria-hidden="true">⌛</span>
+      <p class="commit-pillar__title">Built for Generations</p>
+      <p>Petrified wood does not rot, warp, or decay. A table we make today will still be in perfect condition in 200 years — passed from one generation to the next. Choosing our furniture is a choice against disposable consumption.</p>
+    </div>
+  </section>
+
+  <!-- SPLIT: SOURCING -->
+  <div class="commit-split" data-animate>
+    <div class="commit-split__img">
+      <img src="images/about_brand3.png" alt="Licensed excavation of petrified wood in Indonesian forest" loading="lazy">
+    </div>
+    <div class="commit-split__copy">
+      <p class="label">Responsible Extraction</p>
+      <h2>Licensed Mining,<br>Proper Rights</h2>
+      <p>The ancient deposits of petrified wood found across the Indonesian archipelago — in the highlands of Banten, the riverbeds of Sumatra, and the volcanic foothills of Java — are a finite and irreplaceable geological resource.</p>
+      <p>CV Karya Bersama holds and operates under proper IUP (Izin Usaha Pertambangan) mining concession rights. Every extraction site is permitted by local and regional authorities. We work with local land owners and engage directly with village leadership before commencing any operations.</p>
+      <p>Waste rock and overburden is managed and minimised. We do not use heavy chemical treatments during extraction. The material speaks for itself — our job is simply to reveal it.</p>
+    </div>
+  </div>
+
+  <!-- SPLIT: COMMUNITY (reversed) -->
+  <div class="commit-split commit-split--reverse" data-animate>
+    <div class="commit-split__copy">
+      <p class="label">People &amp; Livelihoods</p>
+      <h2>Local Hands,<br>Local Knowledge</h2>
+      <p>Our workshop in Bogor, West Java is staffed entirely by Indonesian craftsmen — the majority drawn from communities within the sourcing regions of Banten and West Java. We believe the people closest to the material should be the ones who shape it.</p>
+      <p>Workers receive fair wages, on-site skill training, and long-term employment contracts. Many of our senior craftsmen have been with CV Karya Bersama for over a decade. Their knowledge of how to read, cut, and finish petrified wood is a craft that cannot be learned from a manual.</p>
+      <p>We also support local suppliers — from the small trucking operators who move material off site, to the family-run metal workshops in Bogor who fabricate our table bases and frames.</p>
+    </div>
+    <div class="commit-split__img">
+      <img src="images/about_brand2.png" alt="Local craftsmen handling petrified wood specimens" loading="lazy">
+    </div>
+  </div>
+
+  <!-- SOURCE REGIONS -->
+  <section class="commit-sources">
+    <div class="commit-sources__inner">
+      <div class="commit-sources__header" data-animate>
+        <p class="label">Where It Comes From</p>
+        <h2>Sourced Across the Archipelago</h2>
+        <p>Our material is sourced from three primary regions across Indonesia — each with its own geological character and mineral profile that gives each piece its unique colour, grain, and crystalline structure.</p>
+      </div>
+      <div class="commit-sources__grid" data-animate>
+        <div class="commit-source-item">
+          <p class="commit-source-item__region">West Java</p>
+          <p class="commit-source-item__name">Banten</p>
+          <p class="commit-source-item__desc">Our primary sourcing region. The Banten highlands contain some of the densest petrified wood deposits in Indonesia, with pieces characterised by warm amber, deep brown, and occasional opalized grain patterns.</p>
+        </div>
+        <div class="commit-source-item">
+          <p class="commit-source-item__region">Island of Sumatra</p>
+          <p class="commit-source-item__name">Sumatra</p>
+          <p class="commit-source-item__desc">Sumatran specimens tend toward larger, more dramatic forms — often exhibiting bold striation, high mineral contrast, and the occasional grey-blue silicate banding that makes for striking statement pieces.</p>
+        </div>
+        <div class="commit-source-item">
+          <p class="commit-source-item__region">Central &amp; East Java</p>
+          <p class="commit-source-item__name">Jawa</p>
+          <p class="commit-source-item__desc">Javanese deposits produce some of our finest decorative slices and tabletop specimens, with tightly preserved grain structures and rich espresso-to-caramel colour gradients.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LEGACY QUOTE -->
+  <section class="commit-legacy" data-animate>
+    <div class="commit-legacy__inner">
+      <blockquote>
+        "The furniture you choose today is an inheritance your grandchildren will still use."
+      </blockquote>
+      <p>— The philosophy of CV Karya Bersama</p>
+      <div style="margin-top:2.5rem;">
+        <a href="/collections" class="btn btn--dark" id="commit-collections-btn">Browse the Collection</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- SHOWROOM PRESENCE -->
+  <section style="background: var(--white); border-top: 1px solid var(--border);">
+    <div class="commit-presence">
+      <div class="commit-presence__header" data-animate>
+        <p class="label">Where to Find Us</p>
+        <h2>Our Presence Across Indonesia</h2>
+      </div>
+      <div class="commit-locations" data-animate>
+        <div class="commit-location">
+          <p class="commit-location__tag">Main Workshop &amp; HQ</p>
+          <p class="commit-location__name">Bogor</p>
+          <p class="commit-location__address">West Java, Indonesia<br>CV Karya Bersama<br>Production &amp; Stone Workshop</p>
+          <span class="commit-location__role">Manufacturing</span>
+        </div>
+        <div class="commit-location">
+          <p class="commit-location__tag">Flagship Showroom</p>
+          <p class="commit-location__name">Bali</p>
+          <p class="commit-location__address">Mas Village, Ubud<br>Gianyar, Bali 80571<br>Indonesia</p>
+          <span class="commit-location__role">Open to Public</span>
+        </div>
+        <div class="commit-location">
+          <p class="commit-location__tag">Showroom</p>
+          <p class="commit-location__name">Yogyakarta</p>
+          <p class="commit-location__address">Yogyakarta<br>Java, Indonesia</p>
+          <span class="commit-location__role">Open to Public</span>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- FOOTER -->
+<footer class="footer" role="contentinfo">
+  <div class="footer__inner">
+    <div class="footer__top">
+      <div class="footer__brand">
+        <img src="images/PJA Header Logo_1.png" alt="Putra Jambu Antique" style="height:40px;width:auto;margin-bottom:0.5rem;" loading="lazy">
+        <p class="footer__brand-sub">Petrified Wood Furnistone</p>
+        <p>One-of-a-kind petrified wood furniture and décor, handcrafted by CV Karya Bersama, showcased in Ubud, Bali.</p>
+        <div class="footer__social">
+          <a href="https://www.instagram.com/putrajambuantique/" target="_blank" rel="noopener" aria-label="Instagram"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></a>
+          <a href="https://wa.me/6285718233007" target="_blank" rel="noopener" aria-label="WhatsApp"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a>
+        </div>
+      </div>
+      <div><p class="footer__col-title">Collections</p><ul class="footer__links"><li><a href="/collections?cat=living-room">Living Room</a></li><li><a href="/collections?cat=seater">Seater</a></li><li><a href="/collections?cat=dining-room">Dining Room</a></li><li><a href="/collections?cat=outdoor">Outdoor</a></li><li><a href="/collections?cat=decoration">Decoration</a></li><li><a href="/collections">All Pieces</a></li></ul></div>
+      <div><p class="footer__col-title">Company</p><ul class="footer__links"><li><a href="/about">Our Story</a></li><li><a href="/commitment">Our Commitment</a></li><li><a href="/contact">Visit Showroom</a></li><li><a href="/faq">FAQ</a></li><li><a href="/sitemap">Sitemap</a></li><li><a href="/privacy-policy">Privacy Policy</a></li><li><a href="/terms">Terms of Use</a></li></ul></div>
+      <div><p class="footer__col-title">Contact</p><ul class="footer__links"><li>Mas, Ubud, Gianyar<br>Bali 80571, Indonesia</li><li><a href="tel:+6285718233007">+62 857-1823-3007</a></li><li><a href="https://wa.me/6285718233007" target="_blank" rel="noopener">WhatsApp Us</a></li><li><a href="mailto:info@antique.id">info@antique.id</a></li><li><a href="https://www.instagram.com/putrajambuantique/" target="_blank" rel="noopener">@putrajambuantique</a></li></ul></div>
+    </div>
+    <div class="footer__bottom">
+      <p>&copy; <span id="footerYear"></span> Putra Jambu Antique by CV Karya Bersama.</p>
+      <p>antique.id | adehaze</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Hero image zoom-in on load
+  const heroBg = document.getElementById('commitHeroBg');
+  if (heroBg) {
+    const img = new Image();
+    img.onload = () => heroBg.classList.add('loaded');
+    img.src = 'images/about_brand2.png';
+  }
+</script>
+
+</body>
+</html>

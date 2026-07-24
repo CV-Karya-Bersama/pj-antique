@@ -278,6 +278,25 @@
     ldScript.id = 'product-jsonld';
     ldScript.textContent = JSON.stringify(schema);
     document.head.appendChild(ldScript);
+
+    // BreadcrumbList JSON-LD — enables breadcrumb display in Google Search results
+    const catLabel2 = product.categoryLabel || (cat && cat.label) || product.category;
+    const breadcrumbSchema = {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home",        "item": "https://antique.id/" },
+        { "@type": "ListItem", "position": 2, "name": "Collections", "item": "https://antique.id/collections" },
+        { "@type": "ListItem", "position": 3, "name": catLabel2,     "item": `https://antique.id/collections?cat=${encodeURIComponent(product.category)}` },
+        { "@type": "ListItem", "position": 4, "name": product.name,  "item": `https://antique.id/product?id=${encodeURIComponent(product.id)}` }
+      ]
+    };
+
+    const bcScript = document.createElement('script');
+    bcScript.type = 'application/ld+json';
+    bcScript.id = 'breadcrumb-jsonld';
+    bcScript.textContent = JSON.stringify(breadcrumbSchema);
+    document.head.appendChild(bcScript);
   }
 
   /* ---- Build related products carousel ---- */

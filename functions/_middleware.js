@@ -7,7 +7,8 @@
  * before the response reaches the browser or any crawler.
  *
  * Also handles:
- *  - /sitemap.xml  → dynamic sitemap from Google Sheets data
+ *  - /sitemap.xml        → dynamic sitemap from Google Sheets data
+ *  - Accept: text/markdown → converts any HTML page to Markdown on the fly
  *  - All other requests pass through unchanged
  */
 
@@ -34,7 +35,30 @@ async function getProducts() {
 
 // ─── MIDDLEWARE ENTRY ──────────────────────────────────────────────────────────
 export async function onRequest({ request, next, env }) {
-  const url = new URL(request.url);
+  const url    = new URL(request.url);
+  const accept = request.headers.get('Accept') || '';
+
+  // ── Content Negotiation: Accept: text/markdown ────────────────────────────
+  // When a client requests Markdown (e.g. curl -H "Accept: text/markdown" URL),
+  // fetch the HTML response then convert it to clean Markdown at the edge.
+  if (accept.includes('text/markdown')) {
+    const response = await next();
+    const contentType = response.headers.get('Content-Type') || '';
+    // Only convert HTML responses — pass API/XML/asset responses through unchanged
+    if (contentType.includes('text/html')) {
+      const html = await response.text();
+      const markdown = htmlToMarkdown(html, url);
+      return new Response(markdown, {
+        status: response.status,
+        headers: {
+          'Content-Type': 'text/markdown; charset=utf-8',
+          'Cache-Control': 'public, max-age=300',
+          'Vary': 'Accept',
+        }
+      });
+    }
+    return response;
+  }
 
   // ── Route: /sitemap.xml ──────────────────────────────────────────────────
   if (url.pathname === '/sitemap.xml') {
@@ -325,3 +349,145 @@ async function handleSitemap() {
     }
   });
 }
+
+// ─── HTML → MARKDOWN CONVERTER ────────────────────────────────────────────────
+/**
+ * Converts an HTML string to clean Markdown using HTMLRewriter.
+ * Runs entirely at the edge with zero external dependencies.
+ *
+ * Handles: h1-h6, p, a, img, strong/b, em/i, code, pre, blockquote,
+ *          ul/ol/li, table/tr/th/td, hr, br, nav, footer (stripped).
+ *
+ * Usage: GET /any-page  with  Accept: text/markdown
+ */
+function htmlToMarkdown(html, url) {
+  // We build the markdown by accumulating text chunks via a state machine.
+  // HTMLRewriter is streaming/async, but since we already have the full HTML
+  // string here we can use a simple regex-based approach that's fast and
+  // dependency-free for a Worker context.
+
+  let md = html;
+
+  // ── 1. Strip elements we never want ──────────────────────────────────────
+  const STRIP_TAGS = ['script', 'style', 'nav', 'header', 'footer',
+                      'noscript', 'svg', 'form', 'button', 'iframe',
+                      'aside', '.page-transition', '.nav__mobile'];
+  for (const tag of ['script','style','nav','header','footer','noscript',
+                     'svg','form','button','iframe','aside']) {
+    md = md.replace(new RegExp(`<${tag}[^>]*>[\\s\\S]*?<\\/${tag}>`, 'gi'), '');
+  }
+  // Strip remaining self-closing / void tags that add noise
+  md = md.replace(/<(link|meta|input|br\s*\/?)(\s[^>]*)?\/?>/gi, '\n');
+
+  // ── 2. Block elements → Markdown ─────────────────────────────────────────
+  // Headings
+  for (let i = 6; i >= 1; i--) {
+    const hashes = '#'.repeat(i);
+    md = md.replace(new RegExp(`<h${i}[^>]*>([\\s\\S]*?)<\\/h${i}>`, 'gi'),
+      (_, inner) => `\n\n${hashes} ${stripTags(inner).trim()}\n\n`);
+  }
+
+  // Blockquote
+  md = md.replace(/<blockquote[^>]*>([\s\S]*?)<\/blockquote>/gi,
+    (_, inner) => inner.trim().split('\n').map(l => `> ${l}`).join('\n') + '\n\n');
+
+  // Pre / code blocks
+  md = md.replace(/<pre[^>]*><code[^>]*>([\s\S]*?)<\/code><\/pre>/gi,
+    (_, inner) => `\n\`\`\`\n${decodeEntities(inner)}\n\`\`\`\n\n`);
+  md = md.replace(/<pre[^>]*>([\s\S]*?)<\/pre>/gi,
+    (_, inner) => `\n\`\`\`\n${decodeEntities(stripTags(inner))}\n\`\`\`\n\n`);
+
+  // HR
+  md = md.replace(/<hr\s*\/?>/gi, '\n\n---\n\n');
+
+  // ── 3. Inline elements → Markdown ────────────────────────────────────────
+  // Images (before links so nested <a><img></a> works)
+  md = md.replace(/<img[^>]+alt="([^"]*)"[^>]+src="([^"]*)"[^>]*\/?>/gi,
+    (_, alt, src) => `![${alt}](${src})`);
+  md = md.replace(/<img[^>]+src="([^"]*)"[^>]*(?:alt="([^"]*)")?[^>]*\/?>/gi,
+    (_, src, alt='') => `![${alt}](${src})`);
+
+  // Links
+  md = md.replace(/<a[^>]+href="([^"]*)"[^>]*>([\s\S]*?)<\/a>/gi,
+    (_, href, inner) => {
+      const text = stripTags(inner).trim();
+      if (!text) return '';
+      // Make relative URLs absolute
+      const absHref = href.startsWith('http') ? href
+        : href.startsWith('/') ? `${url.origin}${href}` : href;
+      return `[${text}](${absHref})`;
+    });
+
+  // Bold / Italic
+  md = md.replace(/<(strong|b)[^>]*>([\s\S]*?)<\/(strong|b)>/gi, (_, _t, inner) => `**${stripTags(inner).trim()}**`);
+  md = md.replace(/<(em|i)[^>]*>([\s\S]*?)<\/(em|i)>/gi,         (_, _t, inner) => `_${stripTags(inner).trim()}_`);
+
+  // Inline code
+  md = md.replace(/<code[^>]*>([\s\S]*?)<\/code>/gi, (_, inner) => `\`${decodeEntities(inner)}\``);
+
+  // ── 4. Lists ──────────────────────────────────────────────────────────────
+  // Ordered list items
+  md = md.replace(/<ol[^>]*>([\s\S]*?)<\/ol>/gi, (_, inner) => {
+    let i = 0;
+    return inner.replace(/<li[^>]*>([\s\S]*?)<\/li>/gi,
+      (_, li) => `${++i}. ${stripTags(li).trim()}\n`) + '\n';
+  });
+  // Unordered list items
+  md = md.replace(/<ul[^>]*>([\s\S]*?)<\/ul>/gi, (_, inner) =>
+    inner.replace(/<li[^>]*>([\s\S]*?)<\/li>/gi,
+      (_, li) => `- ${stripTags(li).trim()}\n`) + '\n');
+
+  // ── 5. Tables ─────────────────────────────────────────────────────────────
+  md = md.replace(/<table[^>]*>([\s\S]*?)<\/table>/gi, (_, inner) => {
+    const rows = [];
+    inner.replace(/<tr[^>]*>([\s\S]*?)<\/tr>/gi, (_, row) => {
+      const cells = [];
+      row.replace(/<t[hd][^>]*>([\s\S]*?)<\/t[hd]>/gi, (_, cell) => {
+        cells.push(stripTags(cell).trim());
+      });
+      rows.push(cells);
+    });
+    if (!rows.length) return '';
+    const header = `| ${rows[0].join(' | ')} |`;
+    const divider = `| ${rows[0].map(() => '---').join(' | ')} |`;
+    const body = rows.slice(1).map(r => `| ${r.join(' | ')} |`).join('\n');
+    return `\n${header}\n${divider}\n${body}\n\n`;
+  });
+
+  // ── 6. Paragraphs & line breaks ───────────────────────────────────────────
+  md = md.replace(/<p[^>]*>([\s\S]*?)<\/p>/gi,
+    (_, inner) => `\n${stripTags(inner).trim()}\n\n`);
+  md = md.replace(/<br\s*\/?>/gi, '\n');
+  md = md.replace(/<\/?(div|section|article|main|span|label)[^>]*>/gi, '\n');
+
+  // ── 7. Remaining tags & cleanup ───────────────────────────────────────────
+  md = md.replace(/<[^>]+>/g, '');           // strip any remaining tags
+  md = decodeEntities(md);                    // decode &amp; &nbsp; etc.
+  md = md.replace(/\n{3,}/g, '\n\n');        // collapse excess blank lines
+  md = md.trim();
+
+  // ── 8. Add a header with page URL ─────────────────────────────────────────
+  const pageLabel = url.pathname === '/' ? 'Home' : url.pathname.replace(/^\//, '');
+  return `<!-- Putra Jambu Antique — ${SITE_URL}${url.pathname} -->\n<!-- Generated by content negotiation (Accept: text/markdown) -->\n\n${md}\n\n---\n*Source: [${pageLabel}](${SITE_URL}${url.pathname}${url.search})*\n`;
+}
+
+/** Strip all HTML tags from a string */
+function stripTags(str) {
+  return (str || '').replace(/<[^>]+>/g, '');
+}
+
+/** Decode common HTML entities */
+function decodeEntities(str) {
+  return (str || '')
+    .replace(/&amp;/g,   '&')
+    .replace(/&lt;/g,    '<')
+    .replace(/&gt;/g,    '>')
+    .replace(/&quot;/g,  '"')
+    .replace(/&#39;/g,   "'")
+    .replace(/&nbsp;/g,  ' ')
+    .replace(/&mdash;/g, '\u2014')
+    .replace(/&ndash;/g, '\u2013')
+    .replace(/&rsaquo;/g, '›')
+    .replace(/&#(\d+);/g, (_, code) => String.fromCharCode(Number(code)));
+}
+

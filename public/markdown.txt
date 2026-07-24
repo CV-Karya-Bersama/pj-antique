@@ -1,0 +1,6 @@
+# Get the About page as Markdown
+curl -H "Accept: text/markdown" https://antique.id/about
+# Get a product page as Markdown
+curl -H "Accept: text/markdown" "https://antique.id/product?id=TR.004"
+# Get the Collections page as Markdown
+curl -H "Accept: text/markdown" https://antique.id/collections
