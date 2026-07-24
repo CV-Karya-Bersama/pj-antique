@@ -1,0 +1,21 @@
+{
+  "linkset": [
+    {
+      "anchor": "https://antique.id/api/products",
+      "service-desc": [
+        {
+          "href": "https://antique.id/api/products",
+          "type": "application/json",
+          "title": "Products API Endpoint"
+        }
+      ],
+      "service-doc": [
+        {
+          "href": "https://antique.id/llms.txt",
+          "type": "text/markdown",
+          "title": "API and Site Documentation for LLMs"
+        }
+      ]
+    }
+  ]
+}

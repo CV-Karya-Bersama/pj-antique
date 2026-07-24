@@ -7,3 +7,6 @@ Disallow: /functions/
 
 # Sitemap location
 Sitemap: https://antique.id/sitemap.xml
+
+# AI Content Signals (https://contentsignals.org)
+Content-Signal: search=yes, ai-input=yes, ai-train=no

@@ -130,4 +130,72 @@
     });
   }
 
+  /* ---------- WebMCP (Agent-Ready) ---------- */
+  async function setupWebMCP() {
+    // Check if the browser supports WebMCP
+    if (!navigator.modelContext || typeof navigator.modelContext.provideContext !== 'function') return;
+
+    try {
+      await navigator.modelContext.provideContext({
+        tools: [
+          {
+            name: "searchProducts",
+            description: "Search the Putra Jambu Antique petrified wood furniture catalog by keyword or category.",
+            inputSchema: {
+              type: "object",
+              properties: {
+                query: {
+                  type: "string",
+                  description: "Keyword to search for (e.g. 'coffee table', 'outdoor', 'stool', 'dining')"
+                }
+              },
+              required: ["query"]
+            },
+            execute: async (args) => {
+              try {
+                const res = await fetch('/api/products');
+                const data = await res.json();
+                const products = data.products || [];
+                const query = args.query.toLowerCase();
+                const matches = products.filter(p => 
+                  (p.name && p.name.toLowerCase().includes(query)) ||
+                  (p.category && p.category.toLowerCase().includes(query)) ||
+                  (p.shortDesc && p.shortDesc.toLowerCase().includes(query))
+                );
+                const results = matches.slice(0, 8); // Return top 8
+                return {
+                  text: results.length > 0 
+                    ? `Found ${matches.length} products matching "${args.query}". Top results:\n` + results.map(p => `- ${p.name} (${p.category}) — SKU: ${p.id} — ${p.dimensions || ''}\n  Link: https://antique.id/product?id=${p.id}`).join('\n')
+                    : `No products found matching "${args.query}". Try searching for 'coffee table', 'stool', or 'dining'.`
+                };
+              } catch (e) {
+                return { text: "Error fetching products: " + e.message };
+              }
+            }
+          },
+          {
+            name: "getContactInfo",
+            description: "Get the showroom location and contact information for Putra Jambu Antique.",
+            inputSchema: {
+              type: "object",
+              properties: {},
+              required: []
+            },
+            execute: async () => {
+              return {
+                text: "Flagship Showroom: Mas Village, Ubud, Gianyar, Bali 80571, Indonesia.\nWhatsApp: +62 857-1823-3007\nEmail: info@antique.id\nInstagram: @putrajambuantique\nMain Workshop: CV Karya Bersama, Bogor, West Java, Indonesia."
+              };
+            }
+          }
+        ]
+      });
+      console.log('[WebMCP] Registered tools with AI agent');
+    } catch (e) {
+      console.warn('[WebMCP] Failed to register tools:', e);
+    }
+  }
+
+  // Initialize WebMCP tools
+  setupWebMCP();
+
 })();

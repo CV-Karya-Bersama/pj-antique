@@ -1,0 +1,6 @@
+/.well-known/api-catalog
+  Content-Type: application/linkset+json
+
+/*
+  Link: </llms.txt>; rel="help"
+  Link: </.well-known/api-catalog>; rel="api-catalog"
