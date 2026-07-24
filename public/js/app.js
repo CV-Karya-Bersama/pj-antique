@@ -14,7 +14,8 @@
   const nav = document.getElementById('mainNav');
   const hamburger = document.getElementById('navHamburger');
   const mobileMenu = document.getElementById('mobileMenu');
-  const navLinks = document.querySelectorAll('.nav__mobile .nav__link');
+  const mobileClose = document.getElementById('mobileClose');
+  const navLinks = document.querySelectorAll('.nav__mobile a');
 
   function closeMobileMenu() {
     mobileMenu.classList.remove('active');
@@ -41,6 +42,7 @@
     });
 
     navLinks.forEach(link => link.addEventListener('click', closeMobileMenu));
+    if (mobileClose) mobileClose.addEventListener('click', closeMobileMenu);
     
     // Allow clicking outside the links to close
     mobileMenu.addEventListener('click', (e) => {

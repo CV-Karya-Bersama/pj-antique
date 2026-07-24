@@ -1,0 +1,15 @@
+{
+  "name": "Putra Jambu Antique Catalog",
+  "description": "Premium petrified wood furniture and decor manufacturer in Indonesia. All pieces are one-of-a-kind natural specimens.",
+  "apis": {
+    "products": {
+      "url": "https://antique.id/api/products",
+      "method": "GET",
+      "description": "Returns the complete catalog of petrified wood pieces in JSON format."
+    }
+  },
+  "capabilities": [
+    "product_discovery",
+    "inquiry_generation"
+  ]
+}

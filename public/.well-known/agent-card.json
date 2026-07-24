@@ -1,0 +1,16 @@
+{
+  "$schema": "https://a2a-specs.com/schemas/agent-card.json",
+  "agent_id": "pj-antique-agent-v1",
+  "name": "Putra Jambu Antique Sales Agent",
+  "description": "Facilitates discovery and inquiries for premium petrified wood furniture.",
+  "owner": "CV Karya Bersama",
+  "contact": {
+    "email": "info@antique.id",
+    "whatsapp": "+6285718233007"
+  },
+  "endpoints": {
+    "catalog": "https://antique.id/api/products",
+    "webmcp": "https://antique.id/js/app.js"
+  },
+  "protocols": ["webmcp", "rest"]
+}
