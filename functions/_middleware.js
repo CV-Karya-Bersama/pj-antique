@@ -48,6 +48,55 @@ async function getProducts(env) {
   return _productCache;
 }
 
+// ─── DYNAMIC MARKDOWN GENERATOR (For Product Pages) ────────────────────────────
+function generateProductMarkdown(product, canonicalUrl) {
+  const title = buildTitle(product);
+  const description = buildDescription(product);
+  const image = product.images?.[0] || product.fallbackImage || '';
+  const now = new Date().toISOString();
+  
+  return `---
+created: ${now}
+tags: [${product.category || 'Petrified Wood'}]
+source: ${canonicalUrl}
+---
+
+# ${title}
+
+> ## Excerpt
+> ${description}
+
+---
+${image ? `![${product.name || 'Product Image'}](${image})` : ''}
+
+## Specifications
+- **Category:** ${product.category || 'N/A'}
+- **SKU:** ${product.id}
+- **Dimensions:** ${product.dimensions || 'N/A'}
+- **Weight:** ${product.weight || 'N/A'}
+- **Finish:** ${product.finish || 'N/A'}
+
+## About Putra Jambu Antique
+One-of-a-kind petrified wood furniture and décor, handcrafted by CV Karya Bersama.
+
+### Collections
+- [Living Room](https://antique.id/collections?cat=living-room)
+- [Seater](https://antique.id/collections?cat=seater)
+- [Dining Room](https://antique.id/collections?cat=dining-room)
+- [Outdoor](https://antique.id/collections?cat=outdoor)
+- [Decoration](https://antique.id/collections?cat=decoration)
+- [All Pieces](https://antique.id/collections)
+
+### Contact
+- Flagship Showroom: Mas, Ubud, Gianyar, Bali 80571, Indonesia
+- WhatsApp: [+62 857-1823-3007](https://wa.me/6285718233007)
+- Email: [info@antique.id](mailto:info@antique.id)
+
+© ${new Date().getFullYear()} Putra Jambu Antique by CV Karya Bersama.
+`;
+}
+
+
 // ─── MIDDLEWARE ENTRY ──────────────────────────────────────────────────────────
 export async function onRequest({ request, next, env }) {
   const url    = new URL(request.url);
@@ -57,6 +106,31 @@ export async function onRequest({ request, next, env }) {
   // When a client requests Markdown (e.g. curl -H "Accept: text/markdown" URL),
   // fetch the HTML response then convert it to clean Markdown at the edge.
   if (accept.includes('text/markdown')) {
+    const isProductPage = url.pathname.endsWith('/product.html') || url.pathname === '/product';
+    const id = url.searchParams.get('id');
+
+    // 1. Dynamic Markdown for Product Pages (since the HTML is just an empty shell)
+    if (isProductPage && id) {
+      try {
+        const products = await getProducts(env);
+        const product  = products.find(p => p.id === id);
+        if (product) {
+          const markdown = generateProductMarkdown(product, url.href);
+          return new Response(markdown, {
+            status: 200,
+            headers: {
+              'Content-Type': 'text/markdown; charset=utf-8',
+              'Cache-Control': 'public, max-age=300',
+              'Vary': 'Accept',
+            }
+          });
+        }
+      } catch (err) {
+        console.error('[middleware] Error fetching product for markdown:', err);
+      }
+    }
+
+    // 2. Generic HTML-to-Markdown fallback for all other static pages
     const response = await next();
     const contentType = response.headers.get('Content-Type') || '';
     // Only convert HTML responses — pass API/XML/asset responses through unchanged
