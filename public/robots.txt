@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+# Block internal/API endpoints
+Disallow: /api/
+Disallow: /functions/
+
+# Sitemap location
+Sitemap: https://antique.id/sitemap.xml

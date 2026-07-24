@@ -168,7 +168,8 @@
     initLightbox();
 
     // Update SEO Meta Tags
-    document.title = `Petrified Wood ${product.name} - ${product.id} — PJ Antique`;
+    const productTitle = `Petrified Wood ${product.name} - ${product.id} — PJ Antique`;
+    document.title = productTitle;
     
     let metaDesc = document.querySelector('meta[name="description"]');
     if (!metaDesc) {
@@ -179,6 +180,104 @@
     const dims = product.dimensions ? ` Dimensions: ${product.dimensions}.` : '';
     const wgt = product.weight ? ` Weight: ${product.weight} kg.` : '';
     metaDesc.content = `Discover our premium Petrified Wood ${product.name}. Authentic, handcrafted fossil wood furniture from Indonesia.${dims}${wgt} SKU: ${product.id}.`;
+
+    // Inject canonical URL for this product
+    let canonical = document.querySelector('link[rel="canonical"]');
+    if (!canonical) {
+      canonical = document.createElement('link');
+      canonical.rel = 'canonical';
+      document.head.appendChild(canonical);
+    }
+    canonical.href = `https://antique.id/product?id=${encodeURIComponent(product.id)}`;
+
+    // Inject og:url
+    let ogUrl = document.querySelector('meta[property="og:url"]');
+    if (!ogUrl) {
+      ogUrl = document.createElement('meta');
+      ogUrl.setAttribute('property', 'og:url');
+      document.head.appendChild(ogUrl);
+    }
+    ogUrl.content = `https://antique.id/product?id=${encodeURIComponent(product.id)}`;
+
+    // Inject og:title and og:description dynamically
+    const ogTitle = document.querySelector('meta[property="og:title"]');
+    if (ogTitle) ogTitle.content = productTitle;
+    const ogDesc = document.querySelector('meta[property="og:description"]');
+    if (ogDesc) ogDesc.content = metaDesc.content;
+
+    // Inject first product image into og:image
+    const firstImg = window.PJA.resolveImage(product);
+    const ogImg = document.querySelector('meta[property="og:image"]');
+    if (ogImg && firstImg) ogImg.content = firstImg.startsWith('http') ? firstImg : `https://antique.id${firstImg}`;
+
+    // Inject Product JSON-LD structured data for rich results
+    const existingLd = document.getElementById('product-jsonld');
+    if (existingLd) existingLd.remove();
+
+    const availability = product.stock === '0'
+      ? 'https://schema.org/OutOfStock'
+      : 'https://schema.org/InStock';
+
+    const schema = {
+      "@context": "https://schema.org/",
+      "@type": "Product",
+      "name": product.name,
+      "description": metaDesc.content,
+      "image": [window.PJA.resolveImage(product)],
+      "sku": product.id,
+      "brand": {
+        "@type": "Brand",
+        "name": "Putra Jambu Antique"
+      },
+      "offers": {
+        "@type": "Offer",
+        "url": `https://antique.id/product?id=${encodeURIComponent(product.id)}`,
+        "priceCurrency": "IDR",
+        "price": "0",
+        "priceValidUntil": new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString().split('T')[0],
+        "availability": availability,
+        "seller": {
+          "@type": "Organization",
+          "name": "Putra Jambu Antique"
+        },
+        "hasMerchantReturnPolicy": {
+          "@type": "MerchantReturnPolicy",
+          "applicableCountry": "ID",
+          "returnPolicyCategory": "https://schema.org/MerchantReturnNotPermitted"
+        },
+        "shippingDetails": {
+          "@type": "OfferShippingDetails",
+          "shippingRate": {
+            "@type": "MonetaryAmount",
+            "value": "0",
+            "currency": "IDR"
+          },
+          "shippingDestination": {
+            "@type": "DefinedRegion",
+            "addressCountry": "ID"
+          },
+          "deliveryTime": {
+            "@type": "ShippingDeliveryTime",
+            "handlingTime": { "@type": "QuantitativeValue", "minValue": 1, "maxValue": 7, "unitCode": "DAY" },
+            "transitTime": { "@type": "QuantitativeValue", "minValue": 1, "maxValue": 14, "unitCode": "DAY" }
+          }
+        }
+      }
+    };
+
+    // Only add material/dimensions as additionalProperty if present
+    if (product.material || product.dimensions || product.finish) {
+      schema.additionalProperty = [];
+      if (product.material) schema.additionalProperty.push({ "@type": "PropertyValue", "name": "Material", "value": product.material });
+      if (product.dimensions) schema.additionalProperty.push({ "@type": "PropertyValue", "name": "Dimensions", "value": product.dimensions });
+      if (product.finish) schema.additionalProperty.push({ "@type": "PropertyValue", "name": "Finish", "value": product.finish });
+    }
+
+    const ldScript = document.createElement('script');
+    ldScript.type = 'application/ld+json';
+    ldScript.id = 'product-jsonld';
+    ldScript.textContent = JSON.stringify(schema);
+    document.head.appendChild(ldScript);
   }
 
   /* ---- Build related products carousel ---- */

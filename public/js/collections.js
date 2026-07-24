@@ -18,6 +18,24 @@
   let currentFiltered = [];
 
   /* ──────────────────────────────────────────────────────────
+     SKELETON LOADER — shown instantly before data arrives
+  ────────────────────────────────────────────────────────── */
+  function showSkeletons(count = 8) {
+    const grid = document.getElementById('productsGrid');
+    if (!grid) return;
+    grid.innerHTML = '';
+    for (let i = 0; i < count; i++) {
+      grid.innerHTML += `
+        <div class="skeleton-card" aria-hidden="true">
+          <div class="skeleton-card__img"></div>
+          <div class="skeleton-card__line skeleton-card__line--short"></div>
+          <div class="skeleton-card__line skeleton-card__line--long"></div>
+          <div class="skeleton-card__line skeleton-card__line--short"></div>
+        </div>`;
+    }
+  }
+
+  /* ──────────────────────────────────────────────────────────
      RENDER PRODUCT GRID
   ────────────────────────────────────────────────────────── */
   function renderGrid(products, append = false) {
@@ -48,7 +66,7 @@
 
       card.innerHTML = `
         <div class="prod-card__img-wrap">
-          <img src="${imgSrc}" alt="Petrified Wood ${p.name} — ${catLabel} Collection" class="prod-card__img" loading="lazy"
+          <img src="${imgSrc}" alt="Petrified Wood ${p.name} — ${catLabel} Collection" class="prod-card__img" loading="lazy" decoding="async"
                onerror="this.src='${fbSrc}';this.onerror=null;">
           ${p.stock === '0' 
             ? `<span class="prod-card__badge" style="background:var(--espresso);color:white;">Sold Out</span>` 
@@ -209,6 +227,9 @@
   /* ──────────────────────────────────────────────────────────
      INIT
   ────────────────────────────────────────────────────────── */
+  // Show skeleton cards immediately — before any network request
+  showSkeletons();
+
   window.PJA.loadProducts()
     .then(products => {
       allProducts   = products;
