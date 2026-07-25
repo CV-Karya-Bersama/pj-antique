@@ -8,7 +8,7 @@
   <xsl:template match="/">
     <html xmlns="http://www.w3.org/1999/xhtml">
       <head>
-        <title>XML Sitemap — Putra Jambu Antique</title>
+        <title>XML Sitemap — PJ Antique Bali</title>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400&amp;family=DM+Sans:wght@400;500&amp;display=swap" rel="stylesheet" />
         <style type="text/css">
@@ -30,7 +30,7 @@
       <body>
         <div class="header">
           <h1>XML Sitemap</h1>
-          <p>This is a generated XML Sitemap for Putra Jambu Antique, meant for consumption by search engines.</p>
+          <p>This is a generated XML Sitemap for PJ Antique Bali, meant for consumption by search engines.</p>
         </div>
         <div class="container">
           <p class="count"><strong><xsl:value-of select="count(sitemap:urlset/sitemap:url)"/></strong> URLs found in this sitemap.</p>

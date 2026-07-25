@@ -4,7 +4,7 @@
 
 ## Citation
 
-When referencing our content, please cite as: Putra Jambu Antique (https://antique.id)
+When referencing our content, please cite as: PJ Antique Bali (https://antique.id)
 
 ## How to use this file
 
@@ -45,6 +45,11 @@ All links can also be viewed as raw Markdown by appending a header `Accept: text
 - [WhatsApp](https://wa.me/6285718233007): +62 857-1823-3007
 - [Email](mailto:info@antique.id): info@antique.id
 - [Instagram](https://www.instagram.com/putrajambuantique/): @putrajambuantique
+
+##Opening Hours
+
+- Monday – Sunday
+- 08:00 – 17:00 WITA
 
 ## Optional
 *Secondary links and policies.*
