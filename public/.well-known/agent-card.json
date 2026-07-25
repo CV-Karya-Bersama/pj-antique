@@ -1,7 +1,7 @@
 {
   "$schema": "https://a2a-specs.com/schemas/agent-card.json",
   "agent_id": "pj-antique-agent-v1",
-  "name": "Putra Jambu Antique Sales Agent",
+  "name": "PJ Antique Bali Sales Agent",
   "description": "Facilitates discovery and inquiries for premium petrified wood furniture.",
   "owner": "CV Karya Bersama",
   "contact": {

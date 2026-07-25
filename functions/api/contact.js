@@ -13,7 +13,7 @@ export async function onRequestPost({ request, env }) {
     // 2. Format the email content
     const subject = `New Website Enquiry: ${interest} from ${name}`;
     const body = `
-You have received a new message from the Putra Jambu Antique website (Fallback System).
+You have received a new message from the PJ Antique Bali website (Fallback System).
 
 Name: ${name}
 Email: ${email}

@@ -78,7 +78,7 @@
 
     // Build image gallery markup
     const thumbsHTML = product.images.map((img, i) =>
-      `<img src="${window.PJA.resolveImage(product, i)}" alt="Petrified Wood ${product.name} — ${catLabel} — View ${i + 1}"
+      `<img src="${window.PJA.resolveImage(product, i)}" alt="Petrified Wood ${product.name} — SKU: ${product.id} — View ${i + 1}"
             class="product-gallery__thumb ${i === 0 ? 'active' : ''}"
             loading="lazy"
             onerror="this.src='${product.fallbackImage || '/images/prod_coffee_table.png'}';this.onerror=null;">`
@@ -106,7 +106,7 @@
       <!-- GALLERY -->
       <div class="product-gallery" data-animate="left">
         <div class="product-gallery__main">
-          <img src="${window.PJA.resolveImage(product)}" alt="Petrified Wood ${product.name} — ${catLabel} Collection" loading="eager"
+          <img src="${window.PJA.resolveImage(product)}" alt="Petrified Wood ${product.name} — SKU: ${product.id}" loading="eager"
                onerror="this.src='${product.fallbackImage || '/images/prod_coffee_table.png'}';this.onerror=null;">
           ${product.stock === '0' ? `<span class="prod-card__badge" style="background:var(--espresso);color:white;top:1rem;left:1rem;">Sold Out</span>` : ''}
         </div>
@@ -139,8 +139,9 @@
                  id="product-enquire-btn">
                 Enquire About This Piece
               </a>
-              <a href="tel:+6285718233007" class="btn btn--ghost" id="product-call-btn">
-                Call Us — +62 857-1823-3007
+              <a href="https://wa.me/6285718233007?text=${encodeURIComponent(`Hello, I am interested in your petrified wood furniture. Could you please share more information?\nI am inquiring about the price of the ${product.name} (SKU: ${product.id})`)}" 
+                 target="_blank" rel="noopener noreferrer" class="btn btn--ghost" id="product-call-btn">
+                Call Us / Message Us Via WhatsApp +62 857-1823-3007
               </a>
               <p class="product-info__note">
                 Each piece is unique. Contact us to check availability and arrange a viewing at our Ubud, Bali showroom.
@@ -227,7 +228,7 @@
       "sku": product.id,
       "brand": {
         "@type": "Brand",
-        "name": "Putra Jambu Antique"
+        "name": "PJ Antique Bali"
       },
       "offers": {
         "@type": "Offer",
@@ -238,7 +239,7 @@
         "availability": availability,
         "seller": {
           "@type": "Organization",
-          "name": "Putra Jambu Antique"
+          "name": "PJ Antique Bali"
         },
         "hasMerchantReturnPolicy": {
           "@type": "MerchantReturnPolicy",
@@ -319,7 +320,7 @@
       track.innerHTML += `
         <a href="/product?id=${encodeURIComponent(p.id)}" class="prod-card">
           <div class="prod-card__img-wrap">
-            <img src="${window.PJA.resolveImage(p)}" alt="${p.name}" class="prod-card__img" loading="lazy" onerror="this.src='${p.fallbackImage || '/images/prod_coffee_table.png'}';this.onerror=null;">
+            <img src="${window.PJA.resolveImage(p)}" alt="Petrified Wood ${p.name} — SKU: ${p.id}" class="prod-card__img" loading="lazy" onerror="this.src='${p.fallbackImage || '/images/prod_coffee_table.png'}';this.onerror=null;">
           </div>
           <div class="prod-card__info">
             <h3 class="prod-card__name">${p.name}</h3>

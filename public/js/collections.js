@@ -66,7 +66,7 @@
 
       card.innerHTML = `
         <div class="prod-card__img-wrap">
-          <img src="${imgSrc}" alt="Petrified Wood ${p.name} — ${catLabel} Collection" class="prod-card__img" loading="lazy" decoding="async"
+          <img src="${imgSrc}" alt="Petrified Wood ${p.name} — SKU: ${p.id}" class="prod-card__img" loading="lazy" decoding="async"
                onerror="this.src='${fbSrc}';this.onerror=null;">
           ${p.stock === '0' 
             ? `<span class="prod-card__badge" style="background:var(--espresso);color:white;">Sold Out</span>` 

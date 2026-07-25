@@ -146,7 +146,7 @@
         tools: [
           {
             name: "searchProducts",
-            description: "Search the Putra Jambu Antique petrified wood furniture catalog by keyword or category.",
+            description: "Search the PJ Antique Bali petrified wood furniture catalog by keyword or category.",
             inputSchema: {
               type: "object",
               properties: {
@@ -181,7 +181,7 @@
           },
           {
             name: "getContactInfo",
-            description: "Get the showroom location and contact information for Putra Jambu Antique.",
+            description: "Get the showroom location and contact information for PJ Antique Bali.",
             inputSchema: {
               type: "object",
               properties: {},

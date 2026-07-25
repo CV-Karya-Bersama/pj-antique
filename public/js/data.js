@@ -1,6 +1,6 @@
 /**
  * js/data.js — Centralised product data loader
- * Putra Jambu Antique Website
+ * PJ Antique Bali Website
  *
  * Fetch order:
  *   1. /api/products  (Cloudflare Pages Function — live Google Sheets)
