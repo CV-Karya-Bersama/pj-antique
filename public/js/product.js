@@ -146,6 +146,21 @@
               <p class="product-info__note">
                 Each piece is unique. Contact us to check availability and arrange a viewing at our Ubud, Bali showroom.
               </p>
+              
+              <div class="product-accordion">
+                <details>
+                  <summary>How to Order</summary>
+                  <div class="product-accordion__content">
+                    We currently process orders directly through WhatsApp to ensure a personalized white-glove service. Click the button above to speak with our specialists. Learn more in our <a href="/faq">FAQ</a>.
+                  </div>
+                </details>
+                <details>
+                  <summary>Shipping & Delivery</summary>
+                  <div class="product-accordion__content">
+                    We offer worldwide shipping from our Bali workshop. Freight costs vary by destination and piece dimensions. View our <a href="/terms#shipping">Shipping Policy</a> for details.
+                  </div>
+                </details>
+              </div>
             `
           }
         </div>
