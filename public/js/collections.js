@@ -61,6 +61,7 @@
       card.href      = `/product?id=${encodeURIComponent(p.id)}`;
       card.className = 'prod-card';
       card.id        = `grid-prod-${p.id}`;
+      card.setAttribute('aria-label', `${p.name} - SKU ${p.id}`);
       card.setAttribute('data-animate', '');
       card.style.transitionDelay = `${(i % 4) * 60}ms`;
 

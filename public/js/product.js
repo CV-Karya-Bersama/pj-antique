@@ -318,7 +318,7 @@
     related.forEach(p => {
       const cat = categories.find(c => c.id === p.category);
       track.innerHTML += `
-        <a href="/product?id=${encodeURIComponent(p.id)}" class="prod-card">
+        <a href="/product?id=${encodeURIComponent(p.id)}" class="prod-card" aria-label="${p.name} - SKU ${p.id}">
           <div class="prod-card__img-wrap">
             <img src="${window.PJA.resolveImage(p)}" alt="Petrified Wood ${p.name} — SKU: ${p.id}" class="prod-card__img" loading="lazy" onerror="this.src='${p.fallbackImage || '/images/prod_coffee_table.png'}';this.onerror=null;">
           </div>

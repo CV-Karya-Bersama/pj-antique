@@ -192,7 +192,7 @@
       <h2 id="featured-title">Featured Pieces</h2>
     </div>
     <div class="featured__track-wrap">
-      <div class="featured__track" id="featuredTrack" role="list">
+      <div class="featured__track" id="featuredTrack">
         <!-- Injected by JS from products.json -->
       </div>
     </div>
@@ -297,7 +297,7 @@
           const imgSrc = window.PJA.resolveImage(p);
           const catLabel = p.categoryLabel || window.PJA.getCategoryLabel(p.category);
           track.innerHTML += `
-            <a href="/product?id=${p.id}" class="prod-card" id="prod-${p.id}">
+            <a href="/product?id=${p.id}" class="prod-card" id="prod-${p.id}" aria-label="${p.name} - SKU ${p.id}">
               <div class="prod-card__img-wrap">
                 <img src="${imgSrc}" alt="${p.name}" class="prod-card__img" loading="lazy"
                      onerror="this.src='${p.fallbackImage || 'images/prod_coffee_table.png'}';this.onerror=null;">
