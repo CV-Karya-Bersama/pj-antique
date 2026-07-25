@@ -151,13 +151,13 @@
                 <details>
                   <summary>How to Order</summary>
                   <div class="product-accordion__content">
-                    We currently process orders directly through WhatsApp to ensure a personalized white-glove service. Click the button above to speak with our specialists. Learn more in our <a href="/faq">FAQ</a>.
+                    We currently process orders directly through WhatsApp to ensure a personalized white-glove service. Click the button above to speak with our specialists. Learn more in our <a href="https://antique.id/faq#how-to-order">FAQ</a>.
                   </div>
                 </details>
                 <details>
                   <summary>Shipping & Delivery</summary>
                   <div class="product-accordion__content">
-                    We offer worldwide shipping from our Bali workshop. Freight costs vary by destination and piece dimensions. View our <a href="/terms#shipping">Shipping Policy</a> for details.
+                    We offer worldwide shipping from our Bali workshop. Freight costs vary by destination and piece dimensions. View our <a href="/faq">Shipping Policy</a> for details.
                   </div>
                 </details>
               </div>
