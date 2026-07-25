@@ -356,9 +356,9 @@
           container.innerHTML = `
             <div style="text-align:center; padding: 10vh 5%; animation: fadeUp 0.6s ease-out forwards;">
               <p class="label" style="margin-bottom:1rem;">Out of Stock</p>
-              <h1 style="font-family: var(--font-display); font-size: clamp(2rem, 5vw, 3.5rem); margin-bottom: 1.5rem; line-height: 1.1;">This Piece Has<br>Found a Home</h1>
+              <h1 style="font-family: var(--font-display); font-size: clamp(2rem, 5vw, 3.5rem); margin-bottom: 1.5rem; line-height: 1.1;">Product Not Found</h1>
               <p style="color: var(--warm-gray); max-width: 600px; margin: 0 auto 2.5rem; line-height: 1.6; font-size: 1.05rem;">
-                The piece you are looking for <strong>(Ref: ${productId})</strong> has been sold and removed from our active catalog. Because every petrified wood piece is a unique geological artifact, it cannot be exactly replicated.
+                The piece you are looking for <strong>(Ref: ${productId})</strong> could not be found. It may have been sold or removed from our catalog.
               </p>
               <a href="/collections" class="btn btn--primary">Browse Available Collections</a>
             </div>

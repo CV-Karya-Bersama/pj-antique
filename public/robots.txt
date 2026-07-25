@@ -2,7 +2,6 @@ User-agent: *
 Allow: /
 
 # Block internal/API endpoints
-Disallow: /api/
 Disallow: /functions/
 
 # Sitemap location
