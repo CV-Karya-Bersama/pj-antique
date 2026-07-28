@@ -100,6 +100,13 @@ One-of-a-kind petrified wood furniture and décor, handcrafted by CV Karya Bersa
 // ─── MIDDLEWARE ENTRY ──────────────────────────────────────────────────────────
 export async function onRequest({ request, next, env }) {
   const url    = new URL(request.url);
+
+  // 301 Redirect .html to clean URLs
+  if (url.pathname.endsWith('.html')) {
+    let cleanPath = url.pathname.slice(0, -5);
+    if (cleanPath === '/index') cleanPath = '/';
+    return Response.redirect(url.origin + cleanPath + url.search, 301);
+  }
   const accept = request.headers.get('Accept') || '';
 
   // ── Content Negotiation: Accept: text/markdown ────────────────────────────
