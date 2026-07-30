@@ -763,22 +763,14 @@ section { overflow: hidden; }
 
 .product-gallery__main {
   position: relative;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  aspect-ratio: 4/5;
+  overflow: hidden;
   background: var(--cream-dark);
   margin-bottom: 0.75rem;
-  min-height: 250px;
-  max-height: 75vh;
-  overflow: hidden;
 }
 .product-gallery__main img {
-  width: 100%;
-  height: auto;
-  max-height: 75vh;
+  width: 100%; height: 100%;
   object-fit: contain;
-  display: block;
 }
 .product-gallery__thumbs {
   display: flex;

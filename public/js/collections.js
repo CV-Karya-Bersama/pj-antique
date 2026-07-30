@@ -179,16 +179,6 @@
       
     renderGrid(currentFiltered.slice(0, PAGE_SIZE));
 
-    // Instant visual feedback animation on grid
-    const gridEl = document.getElementById('productsGrid');
-    if (gridEl) {
-      gridEl.style.opacity = '0.3';
-      gridEl.style.transition = 'opacity 0.2s ease-out';
-      requestAnimationFrame(() => {
-        gridEl.style.opacity = '1';
-      });
-    }
-
     // Update result count
     const countEl = document.getElementById('resultCount');
     if (countEl) {
@@ -225,11 +215,12 @@
         const avail = availSelect ? availSelect.value : 'active';
         applyFilter(cat, query, sort, avail);
 
-        // Auto-scroll to the top of the result area for immediate feedback
-        const target = document.getElementById('resultCount') || document.getElementById('productsGrid') || document.getElementById('main-content');
-        if (target) {
-          const y = target.getBoundingClientRect().top + window.scrollY - 100;
-          window.scrollTo({ top: Math.max(0, y), behavior: 'smooth' });
+        if (window.innerWidth <= 768) {
+          const grid = document.getElementById('collectionsGrid');
+          if (grid) {
+            const y = grid.getBoundingClientRect().top + window.scrollY - 100; // 100px offset for sticky header
+            window.scrollTo({ top: y, behavior: 'smooth' });
+          }
         }
       });
       return btn;
