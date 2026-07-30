@@ -73,14 +73,14 @@
   <span class="filter-bar__label">Filter:</span>
   <div id="filterButtons" class="filter-bar__buttons"></div>
 </div>
-<div class="search-bar">
-  <input type="text" id="searchInput" placeholder="Search pieces by Name or SKU..." aria-label="Search pieces">
-  <select id="availabilitySelect" aria-label="Filter by availability">
+<div class="search-bar" style="max-width: var(--max-w); margin: 0 auto; padding: 0 var(--page-px) 1rem; display: flex; gap: 1rem; flex-wrap: wrap;">
+  <input type="text" id="searchInput" placeholder="Search pieces by Name or SKU..." style="flex:1; min-width:200px; max-width:400px; padding:0.75rem 1rem; border:1px solid var(--border-dark); background:var(--white); color:var(--espresso); font-family:var(--font-sans); font-size:0.9rem;" aria-label="Search pieces">
+  <select id="availabilitySelect" style="padding:0.75rem 1rem; border:1px solid var(--border-dark); background:var(--white); color:var(--espresso); font-family:var(--font-sans); font-size:0.9rem; cursor:pointer;" aria-label="Filter by availability">
     <option value="active" selected>Availability: Active Listings</option>
     <option value="all">All Pieces (Including Sold)</option>
     <option value="sold">Sold Out (Portfolio)</option>
   </select>
-  <select id="sortSelect" aria-label="Sort pieces">
+  <select id="sortSelect" style="padding:0.75rem 1rem; border:1px solid var(--border-dark); background:var(--white); color:var(--espresso); font-family:var(--font-sans); font-size:0.9rem; cursor:pointer;" aria-label="Sort pieces">
     <option value="default">Sort by: Default</option>
     <option value="weight-desc">Weight: Heaviest First</option>
     <option value="weight-asc">Weight: Lightest First</option>
