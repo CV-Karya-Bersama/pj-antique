@@ -214,14 +214,6 @@
         const sort = sortSelect ? sortSelect.value : 'default';
         const avail = availSelect ? availSelect.value : 'active';
         applyFilter(cat, query, sort, avail);
-
-        if (window.innerWidth <= 768) {
-          const grid = document.getElementById('collectionsGrid');
-          if (grid) {
-            const y = grid.getBoundingClientRect().top + window.scrollY - 100; // 100px offset for sticky header
-            window.scrollTo({ top: y, behavior: 'smooth' });
-          }
-        }
       });
       return btn;
     };
