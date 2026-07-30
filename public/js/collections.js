@@ -214,6 +214,13 @@
         const sort = sortSelect ? sortSelect.value : 'default';
         const avail = availSelect ? availSelect.value : 'active';
         applyFilter(cat, query, sort, avail);
+
+        // Auto-scroll for immediate visual feedback on mobile/desktop
+        const target = document.getElementById('resultCount') || document.getElementById('productsGrid');
+        if (target) {
+          const y = target.getBoundingClientRect().top + window.scrollY - 100;
+          window.scrollTo({ top: Math.max(0, y), behavior: 'smooth' });
+        }
       });
       return btn;
     };
