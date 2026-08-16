@@ -261,6 +261,21 @@ function injectProductMeta(response, product, canonicalUrl) {
         }
       }
     })
+    // 👉 EDGE-SSR: Inject basic HTML for crawlers (overwritten by JS for users) 👈
+    .on('div#productDetailInner', {
+      element(el) {
+        // We use a basic hidden-from-JS layout. Googlebot sees the raw HTML!
+        const imgHtml = image ? `<img src="${escapeAttr(image)}" alt="${escapeAttr(title)}" style="max-width:100%; height:auto;">` : '';
+        const ssrHtml = `
+          <div style="padding: 2rem 0; opacity: 0; animation: fadeUp 0.1s forwards;">
+            <h1 style="font-size: 2rem; margin-bottom: 1rem;">${escapeAttr(title)}</h1>
+            ${imgHtml}
+            <p style="margin-top: 1rem;">${escapeAttr(description)}</p>
+          </div>
+        `;
+        el.setInnerContent(ssrHtml, { html: true });
+      }
+    })
     .transform(response);
 }
 
