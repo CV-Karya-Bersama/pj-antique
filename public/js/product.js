@@ -46,16 +46,116 @@
     
     const lbImg = lb.querySelector('.lightbox-img');
     
+    let scale = 1;
+    let panX = 0;
+    let panY = 0;
+    let isDragging = false;
+    let startX = 0;
+    let startY = 0;
+
+    function updateTransform(smooth = false) {
+      lbImg.style.transition = smooth ? 'transform 0.3s cubic-bezier(0.2, 0, 0.2, 1)' : 'none';
+      lbImg.style.transform = `translate(${panX}px, ${panY}px) scale(${scale})`;
+    }
+
+    function resetZoom() {
+      scale = 1; panX = 0; panY = 0;
+      updateTransform(true);
+      lbImg.style.cursor = 'zoom-in';
+    }
+
     mainImg.style.cursor = 'zoom-in';
     mainImg.addEventListener('click', () => {
       lbImg.src = mainImg.src;
       lbImg.alt = mainImg.alt;
+      resetZoom();
       lb.classList.add('active');
     });
     
-    lb.addEventListener('click', () => {
-      lb.classList.remove('active');
+    lb.addEventListener('click', (e) => {
+      // Close only if clicking outside the image or on the close button
+      if (e.target === lb || e.target.classList.contains('lightbox-close')) {
+        lb.classList.remove('active');
+      }
     });
+
+    // Double click to zoom exactly to center
+    lbImg.addEventListener('dblclick', (e) => {
+      e.preventDefault();
+      if (scale > 1) {
+        resetZoom();
+        return;
+      }
+      
+      const newScale = 2;
+      const OX = window.innerWidth / 2;
+      const OY = window.innerHeight / 2;
+      const dx = e.clientX - OX;
+      const dy = e.clientY - OY;
+      
+      panX = -(dx - panX) * (newScale / scale);
+      panY = -(dy - panY) * (newScale / scale);
+      scale = newScale;
+      updateTransform(true);
+      lbImg.style.cursor = 'grab';
+    });
+
+    // Wheel to zoom (glued to cursor)
+    lb.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      const zoomFactor = 1.1;
+      const direction = e.deltaY < 0 ? 1 : -1;
+      let newScale = direction > 0 ? scale * zoomFactor : scale / zoomFactor;
+      
+      if (newScale < 1) newScale = 1;
+      if (newScale > 10) newScale = 10;
+      if (newScale === 1 && scale === 1) return;
+
+      const OX = window.innerWidth / 2;
+      const OY = window.innerHeight / 2;
+      const dx = e.clientX - OX;
+      const dy = e.clientY - OY;
+      
+      // Glued math
+      panX = dx - (dx - panX) * (newScale / scale);
+      panY = dy - (dy - panY) * (newScale / scale);
+      scale = newScale;
+      
+      if (scale === 1) {
+        panX = 0; panY = 0;
+        lbImg.style.cursor = 'zoom-in';
+      } else {
+        lbImg.style.cursor = 'grab';
+      }
+      updateTransform(false);
+    }, { passive: false });
+
+    // Panning
+    lbImg.addEventListener('pointerdown', (e) => {
+      if (scale <= 1) return;
+      isDragging = true;
+      startX = e.clientX - panX;
+      startY = e.clientY - panY;
+      lbImg.style.cursor = 'grabbing';
+      lbImg.setPointerCapture(e.pointerId);
+    });
+
+    lbImg.addEventListener('pointermove', (e) => {
+      if (!isDragging) return;
+      panX = e.clientX - startX;
+      panY = e.clientY - startY;
+      updateTransform(false);
+    });
+
+    lbImg.addEventListener('pointerup', (e) => {
+      if (!isDragging) return;
+      isDragging = false;
+      lbImg.style.cursor = 'grab';
+      lbImg.releasePointerCapture(e.pointerId);
+    });
+    
+    // Prevent default drag to avoid ghost image
+    lbImg.addEventListener('dragstart', e => e.preventDefault());
   }
 
   /* ---- Build product detail HTML ---- */
