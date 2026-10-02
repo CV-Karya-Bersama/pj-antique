@@ -1,5 +1,5 @@
 /* ============================================================
-   product.js — Product detail page logic
+   product.js - Product detail page logic
    PJ Antique Website
    ============================================================ */
 
@@ -178,7 +178,7 @@
 
     // Build image gallery markup
     const thumbsHTML = product.images.map((img, i) =>
-      `<img src="${window.PJA.resolveImage(product, i)}" alt="Petrified Wood ${product.name} — SKU: ${product.id} — View ${i + 1}"
+      `<img src="${window.PJA.resolveImage(product, i)}" alt="Petrified Wood ${product.name} - SKU: ${product.id} - View ${i + 1}"
             class="product-gallery__thumb ${i === 0 ? 'active' : ''}"
             loading="lazy"
             onerror="this.src='${product.fallbackImage || '/images/prod_coffee_table.png'}';this.onerror=null;">`
@@ -206,7 +206,7 @@
       <!-- GALLERY -->
       <div class="product-gallery" data-animate="left">
         <div class="product-gallery__main">
-          <img src="${window.PJA.resolveImage(product)}" alt="Petrified Wood ${product.name} — SKU: ${product.id}" loading="eager"
+          <img src="${window.PJA.resolveImage(product)}" alt="Petrified Wood ${product.name} - SKU: ${product.id}" loading="eager"
                onerror="this.src='${product.fallbackImage || '/images/prod_coffee_table.png'}';this.onerror=null;">
           ${product.stock === '0' ? `<span class="prod-card__badge" style="background:var(--espresso);color:white;top:1rem;left:1rem;">Sold Out</span>` : ''}
         </div>
@@ -226,7 +226,7 @@
           ${product.stock === '0' 
             ? `
               <div style="background: var(--cream); padding: 1.5rem; border: 1px solid var(--border); margin-bottom: 1.5rem;">
-                <h3 style="font-family: var(--font-display); font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--espresso);">This Piece Has Found a Home</h3>
+                <h3 style="font-family: var(--font-display); font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--espresso);">This piece has found a home</h3>
                 <p style="color: var(--warm-gray); line-height: 1.5; font-size: 0.95rem; margin: 0;">
                   The piece you are looking for (Ref: ${product.id}) has been sold and removed from our active catalog. Because every petrified wood piece is a unique geological artifact, it cannot be exactly replicated.
                 </p>
@@ -251,7 +251,7 @@
                 <details>
                   <summary>How to Order</summary>
                   <div class="product-accordion__content">
-                    We currently process orders directly through WhatsApp to ensure a personalized white-glove service. Click the button above to speak with our specialists. Learn more in our <a href="https://antique.id/faq#how-to-order">FAQ</a>.
+                    We currently process orders directly through WhatsApp. Click the button above to speak with our specialists. Learn more in our <a href="https://antique.id/faq#how-to-order">FAQ</a>.
                   </div>
                 </details>
                 <details>
@@ -284,7 +284,7 @@
     initLightbox();
 
     // Update SEO Meta Tags
-    const productTitle = `Petrified Wood ${product.name} - ${product.id} — PJ Antique`;
+    const productTitle = `Petrified Wood ${product.name} - ${product.id} - PJ Antique`;
     document.title = productTitle;
     
     let metaDesc = document.querySelector('meta[name="description"]');
@@ -295,7 +295,7 @@
     }
     const dims = product.dimensions ? ` Dimensions: ${product.dimensions}.` : '';
     const wgt = product.weight ? ` Weight: ${product.weight} kg.` : '';
-    metaDesc.content = `Discover our premium Petrified Wood ${product.name}. Authentic, handcrafted fossil wood furniture from Indonesia.${dims}${wgt} SKU: ${product.id}.`;
+    metaDesc.content = `Discover our Petrified Wood ${product.name}. Authentic, handcrafted fossil wood furniture from Indonesia.${dims}${wgt} SKU: ${product.id}.`;
 
     // Inject canonical URL for this product
     let canonical = document.querySelector('link[rel="canonical"]');
@@ -395,7 +395,7 @@
     ldScript.textContent = JSON.stringify(schema);
     document.head.appendChild(ldScript);
 
-    // BreadcrumbList JSON-LD — enables breadcrumb display in Google Search results
+    // BreadcrumbList JSON-LD - enables breadcrumb display in Google Search results
     const catLabel2 = product.categoryLabel || (cat && cat.label) || product.category;
     const breadcrumbSchema = {
       "@context": "https://schema.org",
@@ -435,7 +435,7 @@
       track.innerHTML += `
         <a href="/product?id=${encodeURIComponent(p.id)}" class="prod-card" aria-label="${p.name} - SKU ${p.id}">
           <div class="prod-card__img-wrap">
-            <img src="${window.PJA.resolveImage(p)}" alt="Petrified Wood ${p.name} — SKU: ${p.id}" class="prod-card__img" loading="lazy" onerror="this.src='${p.fallbackImage || '/images/prod_coffee_table.png'}';this.onerror=null;">
+            <img src="${window.PJA.resolveImage(p)}" alt="Petrified Wood ${p.name} - SKU: ${p.id}" class="prod-card__img" loading="lazy" onerror="this.src='${p.fallbackImage || '/images/prod_coffee_table.png'}';this.onerror=null;">
           </div>
           <div class="prod-card__info">
             <h3 class="prod-card__name">${p.name}</h3>
@@ -465,7 +465,7 @@
     .then(products => {
       const product = products.find(p => p.id === productId);
       if (!product) {
-        document.title = "Piece Found a Home — PJ Antique";
+        document.title = "Piece Found a Home - PJ Antique";
         const container = document.getElementById('productDetailInner');
         if (container) {
           container.innerHTML = `
